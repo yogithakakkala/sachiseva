@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0A3D62">
+  <meta name="description" content="SachiSeva - AP Sachivalayam Welfare Eligibility App">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SachiSeva">
+
+  <title>SachiSeva — సాచిసేవ</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./icon-192.svg">
+  <link rel="apple-touch-icon" href="./icon-192.svg">
+
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+
+  <style>
+    /* Fallback fonts if Google Fonts fails */
+    @font-face { font-family: 'Noto Sans Telugu Fallback'; src: local('serif'); }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="app-header" role="banner">
+    <div class="header-left">
+      <div class="header-emblem" aria-hidden="true">AP</div>
+      <span class="header-title">SachiSeva</span>
+    </div>
+    <div class="header-center" lang="te">సాచిసేవ</div>
+    <div class="header-right">
+      <button class="header-btn active" id="voice-toggle" onclick="app.toggleVoice()" aria-label="Voice Toggle" title="Voice On/Off">🔊</button>
+    </div>
+  </header>
+
+  <!-- ===== BOTTOM NAVIGATION ===== -->
+  <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <button class="nav-item active" data-screen="home" aria-label="Home — హోమ్">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label-te" lang="te">హోమ్</span>
+      <span class="nav-label-en" lang="en">Home</span>
+    </button>
+    <button class="nav-item" data-screen="schemes" aria-label="Schemes — పథకాలు">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label-te" lang="te">పథకాలు</span>
+      <span class="nav-label-en" lang="en">Schemes</span>
+    </button>
+    <button class="nav-item" data-screen="checklist" aria-label="Checklist — చెక్‌లిస్ట్">
+      <span class="nav-icon">✅</span>
+      <span class="nav-label-te" lang="te">చెక్‌లిస్ట్</span>
+      <span class="nav-label-en" lang="en">Checklist</span>
+    </button>
+    <button class="nav-item" data-screen="services" aria-label="Services — సేవలు">
+      <span class="nav-icon">📄</span>
+      <span class="nav-label-te" lang="te">సేవలు</span>
+      <span class="nav-label-en" lang="en">Services</span>
+    </button>
+    <button class="nav-item" data-screen="help" aria-label="Help — సహాయం">
+      <span class="nav-icon">❓</span>
+      <span class="nav-label-te" lang="te">సహాయం</span>
+      <span class="nav-label-en" lang="en">Help</span>
+    </button>
+  </nav>
+
+  <!-- ===== SCREEN 1: HOME ===== -->
+  <main id="screen-home" class="screen active" role="main" aria-label="Home screen">
+    <!-- Install Banner -->
+    <div id="install-banner" class="install-banner" role="alert">
+      <span class="ib-icon">📲</span>
+      <div style="flex:1;">
+        <div class="ib-text-te" lang="te">యాప్ ఇన్‌స్టాల్ చేయండి</div>
+        <div class="ib-text-en" lang="en">Install this app</div>
+      </div>
+      <button class="ib-btn" onclick="app.installApp()" lang="te">ఇన్‌స్టాల్ చేయండి</button>
+      <span class="ib-dismiss" onclick="app.dismissInstall()" aria-label="Dismiss">✕</span>
+    </div>
+
+    <!-- Stale Version Banner -->
+    <div id="stale-banner" class="stale-banner" role="alert"></div>
+
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+      <div class="wb-main-te" lang="te">సుస్వాగతం</div>
+      <div class="wb-main-en" lang="en">Welcome to SachiSeva</div>
+      <div class="wb-sub-te" lang="te">ప్రభుత్వ పథకాల అర్హత తనిఖీ</div>
+      <div class="wb-sub-en" lang="en">Check Your Scheme Eligibility</div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="action-cards">
+      <div class="action-card" onclick="app.showScreen('schemes')" role="button" aria-label="Check Eligibility">
+        <div class="ac-icon">🔍</div>
+        <div class="ac-te" lang="te">అర్హత తనిఖీ చేయండి</div>
+        <div class="ac-en" lang="en">Check Eligibility</div>
+      </div>
+      <div class="action-card" onclick="app.showScreen('services')" role="button" aria-label="View Document Checklist">
+        <div class="ac-icon">📋</div>
+        <div class="ac-te" lang="te">పత్రాల జాబితా చూడండి</div>
+        <div class="ac-en" lang="en">View Document Checklist</div>
+      </div>
+    </div>
+
+    <!-- Stats Strip -->
+    <div class="stats-strip">
+      <div class="stat-item">
+        <div class="stat-value">30+</div>
+        <div class="stat-label-te" lang="te">పథకాలు</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">📡</div>
+        <div class="stat-label-te" lang="te">ఇంటర్నెట్ అవసరం లేదు</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">🆓</div>
+        <div class="stat-label-te" lang="te">ఉచితం</div>
+      </div>
+    </div>
+
+    <!-- Quick Access Grid -->
+    <div id="quick-access-grid" class="quick-access-grid"></div>
+
+    <!-- Footer -->
+    <div class="app-footer">
+      <div style="font-size:14px;margin-bottom:2px;">🏛️</div>
+      <span lang="te">ఆంధ్రప్రదేశ్ సచివాలయం</span><br>
+      <span lang="en">Powered by Sachivalayam</span>
+    </div>
+  </main>
+
+  <!-- ===== SCREEN 2: SCHEMES ===== -->
+  <main id="screen-schemes" class="screen" aria-label="Schemes screen">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="scheme-search" placeholder="పథకం వెతకండి / Search scheme..."
+        oninput="app.searchSchemes()" aria-label="Search schemes">
+    </div>
+
+    <!-- Category Pills -->
+    <div id="category-pills" class="category-pills" role="tablist" aria-label="Scheme categories"></div>
+
+    <!-- Voice Unavailable Banner -->
+    <div id="voice-unavailable" class="voice-unavailable" role="alert"></div>
+
+    <!-- Schemes Grid -->
+    <div id="schemes-grid" class="schemes-grid"></div>
+  </main>
+
+  <!-- ===== SCREEN 3: CHECKLIST ===== -->
+  <main id="screen-checklist" class="screen" aria-label="Checklist screen">
+    <div id="checklist-container">
+      <!-- Scheme info -->
+      <div id="checklist-scheme-info"></div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-bar-label" id="checklist-progress-label">
+          <span lang="te">0 / 0 పత్రాలు సిద్ధంగా ఉన్నాయి</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" id="checklist-progress-fill" style="width:0%;"></div>
+        </div>
+      </div>
+
+      <!-- Documents Grid -->
+      <div id="documents-grid" class="documents-grid"></div>
+
+      <!-- Sticky Bar -->
+      <div id="checklist-sticky" class="sticky-bar warning"></div>
+    </div>
+  </main>
+
+  <!-- ===== SCREEN 4: SERVICES ===== -->
+  <main id="screen-services" class="screen" aria-label="Services screen">
+    <div class="section-header">
+      <span lang="te">సచివాలయం సేవలు</span>
+    </div>
+    <div class="section-subtitle">
+      <span lang="en">Sachivalayam Certificate Services</span>
+    </div>
+    <div id="services-list"></div>
+  </main>
+
+  <!-- ===== SCREEN 5: HELP ===== -->
+  <main id="screen-help" class="screen" aria-label="Help screen">
+    <!-- How to Use -->
+    <div class="section-header">
+      <span lang="te">యాప్ ఎలా వాడాలి</span>
+    </div>
+    <div class="section-subtitle">
+      <span lang="en">How to Use</span>
+    </div>
+    <div id="help-howto"></div>
+
+    <!-- FAQ -->
+    <div class="section-header">
+      <span lang="te">తరచుగా అడిగే ప్రశ్నలు</span>
+    </div>
+    <div class="section-subtitle">
+      <span lang="en">Frequently Asked Questions</span>
+    </div>
+    <div id="help-faq"></div>
+
+    <!-- Profile -->
+    <div class="section-header">
+      <span lang="te">నా వివరాలు</span>
+    </div>
+    <div class="section-subtitle">
+      <span lang="en">My Profile</span>
+    </div>
+    <div id="profile-form-container"></div>
+
+    <!-- About -->
+    <div class="section-header mt-16">
+      <span lang="te">గురించి</span>
+    </div>
+    <div class="section-subtitle">
+      <span lang="en">About</span>
+    </div>
+    <div class="card" style="font-size:12px;color:var(--text-secondary);line-height:1.6;">
+      <p style="margin-bottom:8px;"><strong>SachiSeva (సాచిసేవ)</strong> — ఆంధ్రప్రదేశ్ సచివాలయం పౌరులకు అందించే సంక్షేమ పథకాల అర్హత మార్గదర్శి.</p>
+      <p style="margin-bottom:8px;" lang="en">A citizen eligibility guidance tool for AP Sachivalayam welfare schemes. Not an enrollment system.</p>
+      <p style="margin-bottom:8px;"><span lang="te">ప్రభుత్వం:</span> <span lang="en">TDP-JSP-BJP Alliance | CM: N. Chandrababu Naidu</span></p>
+      <p><span lang="te">SDG లక్ష్యాలు:</span> <span lang="en">No Poverty, Zero Hunger, Quality Education, Gender Equality</span></p>
+    </div>
+
+    <!-- Version -->
+    <div class="version-badge" id="version-badge" onclick="app.setupAdminAccess()">v2025-01</div>
+  </main>
+
+  <!-- ===== ELIGIBILITY MODAL ===== -->
+  <div id="eligibility-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Eligibility form">
+    <div class="modal">
+      <div class="modal-header">
+        <div></div>
+        <h3 style="text-align:center;" lang="te">అర్హత తనిఖీ</h3>
+        <button class="modal-close" onclick="app.closeModal()" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ===== PIN DIALOG ===== -->
+  <div id="pin-dialog" class="pin-dialog" role="dialog" aria-modal="true" aria-label="Admin PIN"></div>
+
+  <!-- ===== ADMIN PANEL ===== -->
+  <div id="admin-panel" class="admin-panel" role="dialog" aria-modal="true" aria-label="Admin Panel">
+    <div class="admin-header">
+      <h2>🔧 <span lang="te">అడ్మిన్ ప్యానెల్</span></h2>
+      <button class="btn-secondary btn-sm" onclick="app.closeAdminPanel()">
+        <span lang="te">మూసివేయి</span>
+      </button>
+    </div>
+    <div id="admin-panel-body"></div>
+  </div>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="./app.js"></script>
+
+</body>
+</html>

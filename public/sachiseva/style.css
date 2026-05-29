@@ -1,0 +1,1472 @@
+/* ===================================================
+   SachiSeva (సాచిసేవ) — Complete Design System
+   AP Sachivalayam Welfare Eligibility App
+   =================================================== */
+
+/* ----- CSS Variables ----- */
+:root {
+  --primary: #0A3D62;
+  --primary-light: #1A5276;
+  --accent: #F0A500;
+  --accent-dark: #D4900A;
+  --success: #1E8449;
+  --success-light: #D5F5E3;
+  --danger: #C0392B;
+  --danger-light: #FADBD8;
+  --warning: #E67E22;
+  --warning-light: #FDEBD0;
+  --bg-main: #F4F6F9;
+  --bg-card: #FFFFFF;
+  --text-primary: #1A1A2E;
+  --text-secondary: #5D6D7E;
+  --border: #D5D8DC;
+  --shadow: 0 4px 20px rgba(0,0,0,0.10);
+  --shadow-hover: 0 8px 28px rgba(0,0,0,0.14);
+  --radius: 16px;
+  --radius-sm: 12px;
+  --radius-pill: 20px;
+  --header-height: 64px;
+  --nav-height: 60px;
+}
+
+/* ----- Reset & Base ----- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  padding-top: var(--header-height);
+  padding-bottom: var(--nav-height);
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ----- Typography ----- */
+[lang="te"] {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+[lang="en"] {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+h1, h2, h3 {
+  font-family: 'Noto Sans Telugu', serif;
+  color: var(--text-primary);
+}
+
+/* ----- Header ----- */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-emblem {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.header-title {
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.header-center {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.header-btn:hover, .header-btn:active {
+  background: rgba(255,255,255,0.25);
+}
+
+.header-btn.active {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+/* ----- Bottom Navigation ----- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 4px 8px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.nav-item .nav-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.nav-item .nav-label-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.nav-item .nav-label-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.nav-item.active {
+  color: var(--primary);
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+}
+
+.nav-item:not(.active) {
+  color: var(--text-secondary);
+}
+
+/* ----- Screens ----- */
+.screen {
+  display: none;
+  animation: fadeIn 0.3s ease;
+  padding: 16px;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* ----- Cards ----- */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid #E8EAED;
+  padding: 16px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+
+.card:hover, .card:active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card:active {
+  transform: scale(0.97);
+}
+
+/* ----- Scheme Cards Grid ----- */
+.schemes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.scheme-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid #E8EAED;
+  padding: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scheme-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.scheme-card.pension::before { background: #E74C3C; }
+.scheme-card.education::before { background: #2ECC71; }
+.scheme-card.agriculture::before { background: #27AE60; }
+.scheme-card.household::before { background: #F39C12; }
+.scheme-card.transport::before { background: #3498DB; }
+.scheme-card.youth::before { background: #9B59B6; }
+.scheme-card.women::before { background: #E91E63; }
+.scheme-card.housing::before { background: #795548; }
+.scheme-card.weavers::before { background: #FF5722; }
+.scheme-card.health::before { background: #00BCD4; }
+.scheme-card.scst::before { background: #607D8B; }
+.scheme-card.bc::before { background: #FF9800; }
+.scheme-card.minority::before { background: #4CAF50; }
+.scheme-card.services::before { background: #3F51B5; }
+
+.scheme-card:hover, .scheme-card:active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.scheme-card:active {
+  transform: scale(0.97);
+}
+
+.scheme-card .card-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.scheme-card .card-name-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.scheme-card .card-name-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.scheme-card .card-badge {
+  display: inline-block;
+  background: #FFF8E1;
+  color: #B8860B;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Noto Sans Telugu', serif;
+}
+
+.scheme-card .card-arrow {
+  align-self: flex-end;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: auto;
+}
+
+/* ----- Category Pills ----- */
+.category-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 0 12px;
+}
+
+.category-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.category-pill {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.category-pill.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* ----- Buttons ----- */
+.btn-primary {
+  background: var(--accent);
+  color: #1A1A2E;
+  border: none;
+  border-radius: var(--radius-sm);
+  height: 52px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Noto Sans Telugu', serif;
+  transition: background 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary:hover, .btn-primary:active {
+  background: var(--accent-dark);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  border-radius: var(--radius-sm);
+  height: 52px;
+  font-weight: 600;
+  font-size: 16px;
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Noto Sans Telugu', serif;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover, .btn-secondary:active {
+  background: rgba(10,61,98,0.05);
+}
+
+.btn-sm {
+  height: 40px;
+  font-size: 14px;
+  padding: 0 16px;
+  width: auto;
+}
+
+/* ----- Form Inputs ----- */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.form-label .label-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.form-label .label-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  height: 52px;
+  padding: 0 16px;
+  font-size: 16px;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.form-input.error {
+  border-color: var(--danger);
+}
+
+.form-select {
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  height: 52px;
+  padding: 0 16px;
+  font-size: 16px;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  background: white;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%235D6D7E'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  cursor: pointer;
+}
+
+.form-select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.field-error {
+  display: none;
+  color: var(--danger);
+  font-size: 12px;
+  margin-top: 4px;
+  gap: 4px;
+}
+
+.field-error.visible {
+  display: flex;
+}
+
+.field-error .error-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-weight: 600;
+}
+
+.field-error .error-en {
+  font-family: 'Inter', sans-serif;
+}
+
+/* ----- Toggle Switch ----- */
+.toggle-group {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: white;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Noto Sans Telugu', serif;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.toggle-btn.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
+
+/* ----- Modal ----- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+}
+
+.modal-overlay.active {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.4s ease;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  border-radius: 20px 20px 0 0;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-main);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.modal-footer {
+  padding: 12px 16px 24px;
+}
+
+/* ----- Result Display ----- */
+.result-container {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.result-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-icon.eligible {
+  background: var(--success-light);
+  border-radius: 50%;
+  color: var(--success);
+  font-size: 40px;
+}
+
+.result-icon.not-eligible {
+  background: var(--danger-light);
+  border-radius: 50%;
+  color: var(--danger);
+  font-size: 40px;
+}
+
+.result-title-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.result-title-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.result-eligible { color: var(--success); }
+.result-not-eligible { color: var(--danger); }
+
+.result-benefit {
+  display: inline-block;
+  background: var(--success-light);
+  color: var(--success);
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: var(--radius-pill);
+  margin: 12px 0;
+}
+
+.result-reason {
+  background: var(--danger-light);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin: 12px 0;
+  text-align: left;
+}
+
+.result-reason .reason-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-weight: 600;
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.result-reason .reason-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ----- Disclaimer ----- */
+.disclaimer-box {
+  background: var(--warning-light);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin: 16px 0;
+}
+
+.disclaimer-box .disc-icon {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.disclaimer-box .disc-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #7D6608;
+}
+
+.disclaimer-box .disc-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ----- Checklist ----- */
+.checklist-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.checklist-header .scheme-icon {
+  font-size: 36px;
+}
+
+.progress-bar-container {
+  margin: 12px 0 20px;
+}
+
+.progress-bar-label {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.progress-bar {
+  height: 10px;
+  background: #EAECEE;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.documents-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.doc-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 14px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  position: relative;
+}
+
+.doc-card.checked {
+  border-color: var(--success);
+  background: var(--success-light);
+}
+
+.doc-card .doc-icon {
+  font-size: 32px;
+}
+
+.doc-card .doc-name-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.doc-card .doc-name-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.doc-card .voice-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(10,61,98,0.1);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-card .check-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--success);
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.doc-card.checked .check-overlay {
+  display: flex;
+}
+
+/* ----- Bottom Sticky Bar (Checklist) ----- */
+.sticky-bar {
+  position: sticky;
+  bottom: 0;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  margin-top: 16px;
+}
+
+.sticky-bar.warning {
+  background: var(--warning-light);
+  border: 1px solid var(--warning);
+}
+
+.sticky-bar.success {
+  background: var(--success-light);
+  border: 1px solid var(--success);
+}
+
+.sticky-bar .bar-text-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.sticky-bar .bar-text-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.sticky-bar.warning .bar-text-te { color: #7D6608; }
+.sticky-bar.success .bar-text-te { color: var(--success); }
+
+/* ----- Home Banner ----- */
+.welcome-banner {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  margin-bottom: 16px;
+  color: white;
+}
+
+.welcome-banner .wb-main-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.welcome-banner .wb-main-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.9);
+}
+
+.welcome-banner .wb-sub-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+  margin-top: 8px;
+}
+
+.welcome-banner .wb-sub-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ----- Action Cards ----- */
+.action-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.action-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.action-card:hover, .action-card:active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.action-card:active {
+  transform: scale(0.97);
+}
+
+.action-card .ac-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+.action-card .ac-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.action-card .ac-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ----- Stats Strip ----- */
+.stats-strip {
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item .stat-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-item .stat-label-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ----- Quick Access Grid ----- */
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.quick-access-item {
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.quick-access-item:hover, .quick-access-item:active {
+  background: #F0F4F8;
+  transform: translateY(-1px);
+}
+
+.quick-access-item:active {
+  transform: scale(0.95);
+}
+
+.qa-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.qa-label-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.qa-label-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  color: var(--text-secondary);
+}
+
+/* ----- Search Bar ----- */
+.search-bar {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.search-bar input {
+  width: 100%;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  padding: 0 16px 0 44px;
+  font-size: 16px;
+  font-family: 'Noto Sans Telugu', serif;
+  background: white;
+}
+
+.search-bar input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.search-bar .search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+/* ----- FAQ Accordion ----- */
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.faq-question {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.faq-question .faq-q-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 14px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.faq-question .faq-arrow {
+  font-size: 14px;
+  transition: transform 0.3s;
+}
+
+.faq-item.open .faq-arrow {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 16px 14px;
+}
+
+.faq-item.open .faq-answer {
+  display: block;
+}
+
+.faq-answer .faq-a-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.faq-answer .faq-a-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ----- How-to Steps ----- */
+.howto-step {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.howto-step .step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.howto-step .step-text-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.howto-step .step-text-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ----- Admin Panel ----- */
+.admin-panel {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg-main);
+  z-index: 300;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.admin-panel.active {
+  display: block;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.admin-warning {
+  background: var(--warning-light);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.pin-dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+}
+
+.pin-dialog.active {
+  display: flex;
+}
+
+.pin-dialog .pin-box {
+  background: white;
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+}
+
+/* ----- Install Banner ----- */
+.install-banner {
+  display: none;
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--accent);
+}
+
+.install-banner.active {
+  display: flex;
+}
+
+.install-banner .ib-icon {
+  font-size: 24px;
+}
+
+.install-banner .ib-text-te {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 13px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.install-banner .ib-text-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.install-banner .ib-btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #1A1A2E;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.install-banner .ib-dismiss {
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+/* ----- Stale Banner ----- */
+.stale-banner {
+  display: none;
+  background: var(--warning-light);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stale-banner.active {
+  display: flex;
+}
+
+/* ----- Toast ----- */
+.toast-container {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  background: var(--text-primary);
+  color: white;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: slideUp 0.3s ease;
+}
+
+/* ----- Version Badge ----- */
+.version-badge {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 8px;
+  margin-top: 16px;
+  cursor: default;
+  user-select: none;
+}
+
+/* ----- Prefill Notice ----- */
+.prefill-notice {
+  background: #E8F5E9;
+  border: 1px solid #A5D6A7;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-family: 'Noto Sans Telugu', serif;
+  color: #2E7D32;
+}
+
+/* ----- Offline Message ----- */
+.offline-msg {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.offline-msg.active {
+  display: block;
+}
+
+/* ----- Print Styles ----- */
+@media print {
+  .app-header, .bottom-nav, .modal-overlay, .toast-container, .install-banner {
+    display: none !important;
+  }
+  body {
+    padding: 0 !important;
+    background: white !important;
+  }
+  .card, .scheme-card, .doc-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+}
+
+/* ----- Section Headers ----- */
+.section-header {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 20px 0 12px;
+  color: var(--text-primary);
+}
+
+.section-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+/* ----- Footer ----- */
+.app-footer {
+  text-align: center;
+  padding: 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ----- Animations ----- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes checkDraw {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* ----- Checkmark SVG Animation ----- */
+.checkmark-svg {
+  width: 60px;
+  height: 60px;
+}
+
+.checkmark-circle {
+  stroke: var(--success);
+  stroke-width: 3;
+  fill: none;
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: checkmark-circle 0.6s ease forwards;
+}
+
+.checkmark-check {
+  stroke: var(--success);
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: checkmark-check 0.4s 0.3s ease forwards;
+}
+
+@keyframes checkmark-circle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes checkmark-check {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ----- Tab Content ----- */
+.tab-section {
+  margin-top: 24px;
+}
+
+.tab-section h3 {
+  font-family: 'Noto Sans Telugu', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.tab-section h3 + p {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+/* ----- Voice Unavailable Banner ----- */
+.voice-unavailable {
+  display: none;
+  background: #FFF3CD;
+  border: 1px solid #FFC107;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+
+.voice-unavailable.active {
+  display: block;
+}
+
+/* ----- Utility ----- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center { text-align: center; }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
