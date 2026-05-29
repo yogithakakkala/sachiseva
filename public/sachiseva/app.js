@@ -1023,20 +1023,12 @@
       }).join('');
     }
 
-    // Share button
-    const shareBtn = $('#checklist-share-btn');
-
     if (stickyBar) {
       if (allReady) {
         stickyBar.className = 'sticky-bar success';
         stickyBar.innerHTML = `
           <div class="bar-text-te" lang="te">✅ సచివాలయానికి వెళ్ళడానికి సిద్ధంగా ఉన్నారు!</div>
-          <div class="bar-text-en" lang="en">All documents ready — visit Sachivalayam!</div>
-          <div class="flex gap-8 mt-8">
-            <button class="btn-primary btn-sm" onclick="app.shareChecklist('${scheme.id}')">
-              <span lang="te">పంచుకోండి / Share</span>
-            </button>
-          </div>`;
+          <div class="bar-text-en" lang="en">All documents ready — visit Sachivalayam!</div>`;
       } else {
         const missingDocs = [];
         docs.forEach((doc, i) => {
@@ -1048,10 +1040,7 @@
         stickyBar.className = 'sticky-bar warning';
         stickyBar.innerHTML = `
           <div class="bar-text-te" lang="te">${totalDocs - checkedCount} పత్రాలు మిస్సింగ్</div>
-          <div class="bar-text-en" lang="en">Missing: ${missingDocs.slice(0, 3).join(', ')}${missingDocs.length > 3 ? '...' : ''}</div>
-          <button class="btn-primary btn-sm mt-8" onclick="app.shareChecklist('${scheme.id}')">
-            <span lang="te">పంచుకోండి / Share</span>
-          </button>`;
+          <div class="bar-text-en" lang="en">Missing: ${missingDocs.slice(0, 3).join(', ')}${missingDocs.length > 3 ? '...' : ''}</div>`;
       }
     }
   }
