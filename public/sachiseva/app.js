@@ -919,14 +919,54 @@
 
   // ========== CHECKLIST SCREEN ==========
   function renderChecklistScreen() {
-    if (!schemesData || !currentChecklistSchemeId) {
-      const container = $('#checklist-container');
-      if (container) container.innerHTML = '<div class="text-center mt-16"><span lang="te">పథకం ఎంచుకోండి</span><br><span lang="en">Select a scheme first</span></div>';
+    const container = $('#checklist-container');
+    if (!schemesData) return;
+
+    const scheme = currentChecklistSchemeId
+      ? schemesData.schemes.find(s => s.id === currentChecklistSchemeId)
+      : null;
+
+    if (!scheme) {
+      // No scheme picked yet — show a picker (services first, then schemes)
+      if (!container) return;
+      const services = schemesData.schemes.filter(s => s.type === 'service');
+      const others = schemesData.schemes.filter(s => s.type !== 'service');
+      const cardHtml = (s) => `
+        <div class="card mb-12" onclick="app.viewChecklist('${s.id}')" style="cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:32px;">${s.icon}</span>
+            <div style="flex:1;">
+              <div style="font-family:'Noto Sans Telugu',serif;font-weight:700;font-size:15px;" lang="te">${s.nameTe}</div>
+              <div style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text-secondary);" lang="en">${s.nameEn}</div>
+            </div>
+            <span style="color:var(--accent);font-weight:600;font-size:13px;" lang="te">చూడండి →</span>
+          </div>
+        </div>`;
+      container.innerHTML = `
+        <div class="section-header"><span lang="te">పథకం ఎంచుకోండి</span></div>
+        <div class="section-subtitle"><span lang="en">Pick a scheme or service to view its checklist</span></div>
+        ${services.length ? `<div class="section-header" style="margin-top:12px;"><span lang="te">సచివాలయ సేవలు / Services</span></div>${services.map(cardHtml).join('')}` : ''}
+        ${others.length ? `<div class="section-header" style="margin-top:12px;"><span lang="te">పథకాలు / Schemes</span></div>${others.map(cardHtml).join('')}` : ''}
+      `;
       return;
     }
 
-    const scheme = schemesData.schemes.find(s => s.id === currentChecklistSchemeId);
-    if (!scheme) return;
+    // Ensure container has the original checklist markup (it may have been replaced by the picker above)
+    if (container && !$('#documents-grid')) {
+      container.innerHTML = `
+        <div id="checklist-scheme-info"></div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-label" id="checklist-progress-label">
+            <span lang="te">0 / 0 పత్రాలు సిద్ధంగా ఉన్నాయి</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-bar-fill" id="checklist-progress-fill" style="width:0%;"></div>
+          </div>
+        </div>
+        <div id="documents-grid" class="documents-grid"></div>
+        <div id="checklist-sticky" class="sticky-bar warning"></div>
+      `;
+    }
 
     const docs = scheme.documents || [];
     const totalDocs = docs.length;
