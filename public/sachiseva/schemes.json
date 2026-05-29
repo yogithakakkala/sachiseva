@@ -1,0 +1,744 @@
+{
+  "meta": {
+    "version": "2025-01",
+    "government": "TDP-JSP-BJP Alliance",
+    "cm": "N. Chandrababu Naidu",
+    "lastUpdated": "January 2025",
+    "totalSchemes": 30,
+    "updateNote": "Bump sw.js CACHE_VERSION when updating this file"
+  },
+  "categories": [
+    { "id": "all", "nameTe": "అన్నీ", "nameEn": "All", "color": "#0A3D62" },
+    { "id": "pension", "nameTe": "పింఛన్లు", "nameEn": "Pension", "color": "#E74C3C" },
+    { "id": "education", "nameTe": "విద్య", "nameEn": "Education", "color": "#2ECC71" },
+    { "id": "agriculture", "nameTe": "వ్యవసాయం", "nameEn": "Agriculture", "color": "#27AE60" },
+    { "id": "household", "nameTe": "గృహ", "nameEn": "Household", "color": "#F39C12" },
+    { "id": "transport", "nameTe": "రవాణా", "nameEn": "Transport", "color": "#3498DB" },
+    { "id": "youth", "nameTe": "యువత", "nameEn": "Youth", "color": "#9B59B6" },
+    { "id": "women", "nameTe": "మహిళలు", "nameEn": "Women", "color": "#E91E63" },
+    { "id": "housing", "nameTe": "గృహ నిర్మాణం", "nameEn": "Housing", "color": "#795548" },
+    { "id": "weavers", "nameTe": "నేత కార్మికులు", "nameEn": "Weavers", "color": "#FF5722" },
+    { "id": "health", "nameTe": "ఆరోగ్యం", "nameEn": "Health", "color": "#00BCD4" },
+    { "id": "scst", "nameTe": "SC/ST", "nameEn": "SC/ST", "color": "#607D8B" },
+    { "id": "bc", "nameTe": "BC", "nameEn": "BC", "color": "#FF9800" },
+    { "id": "minority", "nameTe": "మైనారిటీ", "nameEn": "Minority", "color": "#4CAF50" },
+    { "id": "services", "nameTe": "సేవలు", "nameEn": "Services", "color": "#3F51B5" }
+  ],
+  "schemes": [
+    {
+      "id": "ntrbharosa",
+      "type": "scheme",
+      "nameTe": "ఎన్టీఆర్ భరోసా పింఛన్",
+      "nameEn": "NTR Bharosa Pension",
+      "category": "pension",
+      "icon": "👴",
+      "badgeText": "₹4,000-₹6,000/మాసం",
+      "priority": "super6",
+      "fields": ["is_ap_resident","pension_type","age","gender","income_monthly","is_govt_employee","has_pucca_house","house_value","disability_percent"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "age_old_age_min": 60,
+        "age_weaver_min": 50,
+        "age_fisherman_min": 50,
+        "income_monthly_max": 10000,
+        "is_govt_employee": false,
+        "has_pucca_house": false,
+        "house_value_max": 250000,
+        "gender_widow": "Female",
+        "gender_single_woman": "Female",
+        "disability_percent_min": 40
+      },
+      "benefitBySubType": {
+        "old_age": "₹4,000/మాసం",
+        "widow": "₹1,500/మాసం",
+        "disabled": "₹6,000/మాసం",
+        "single_woman": "₹1,500/మాసం",
+        "weaver": "₹4,000/మాసం",
+        "fisherman": "₹4,000/మాసం"
+      },
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "వయస్సు రుజువు", "nameEn": "Age Proof (SSC/Birth Cert)", "icon": "📄" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook (Aadhaar linked)", "icon": "🏦" },
+        { "nameTe": "రేషన్ కార్డ్", "nameEn": "Ration Card", "icon": "📋" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" },
+        { "nameTe": "వైకల్య ధృవపత్రం (వర్తిస్తే)", "nameEn": "Disability Certificate (if applicable)", "icon": "📃" },
+        { "nameTe": "భర్త మరణ ధృవపత్రం (వితంతువు పింఛన్‌కు)", "nameEn": "Death Certificate of Husband (widow pension)", "icon": "📜" }
+      ]
+    },
+    {
+      "id": "tallikivandanam",
+      "type": "scheme",
+      "nameTe": "తల్లికి వందనం",
+      "nameEn": "Talliki Vandanam",
+      "category": "education",
+      "icon": "👩‍👧",
+      "badgeText": "₹15,000/సంవత్సరం",
+      "priority": "super6",
+      "fields": ["is_ap_resident","gender","child_in_school","child_class"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "gender": "Female",
+        "child_in_school": true,
+        "child_class": ["Class 1","Class 2","Class 3","Class 4","Class 5","Class 6","Class 7","Class 8","Class 9","Class 10","Class 11","Class 12","Intermediate"]
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "పిల్లల బర్త్ సర్టిఫికెట్", "nameEn": "Child Birth Certificate", "icon": "📄" },
+        { "nameTe": "స్కూల్ అడ్మిషన్ రుజువు", "nameEn": "School Admission Proof", "icon": "🏫" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "annadatasukhibhava",
+      "type": "scheme",
+      "nameTe": "అన్నదాత సుఖీభవ",
+      "nameEn": "Annadata Sukhibhava",
+      "category": "agriculture",
+      "icon": "🌾",
+      "badgeText": "₹20,000/సంవత్సరం",
+      "priority": "super6",
+      "fields": ["is_ap_resident","is_registered_farmer","is_income_tax_payer","is_govt_employee"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "is_registered_farmer": true,
+        "is_income_tax_payer": false,
+        "is_govt_employee": false
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "భూమి రికార్డులు", "nameEn": "Land Records / Pattadar Passbook", "icon": "📋" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "పంట రుజువు", "nameEn": "Crop Proof", "icon": "🌾" }
+      ]
+    },
+    {
+      "id": "deepam2",
+      "type": "scheme",
+      "nameTe": "దీపం 2.0",
+      "nameEn": "Deepam 2.0",
+      "category": "household",
+      "icon": "🔥",
+      "badgeText": "3 ఉచిత LPG సిలిండర్లు",
+      "priority": "super6",
+      "fields": ["is_ap_resident","ration_card_type","has_lpg","is_govt_employee","income_annual"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "ration_card_type": ["White","Yellow"],
+        "has_lpg": false,
+        "is_govt_employee": false,
+        "income_annual_max": 150000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "రేషన్ కార్డ్", "nameEn": "Ration Card", "icon": "📋" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" },
+        { "nameTe": "చిరునామా రుజువు", "nameEn": "Address Proof", "icon": "🏠" }
+      ]
+    },
+    {
+      "id": "freebus",
+      "type": "scheme",
+      "nameTe": "మహిళలకు ఉచిత బస్సు ప్రయాణం",
+      "nameEn": "Free Bus Travel for Women",
+      "category": "transport",
+      "icon": "🚌",
+      "badgeText": "ఉచితం",
+      "priority": "super6",
+      "fields": ["is_ap_resident","gender","age"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "gender": "Female",
+        "age_min": 1
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "వయస్సు రుజువు", "nameEn": "Age Proof", "icon": "📄" }
+      ]
+    },
+    {
+      "id": "yuvagalam",
+      "type": "scheme",
+      "nameTe": "యువ గళం / నిరుద్యోగ భృతి",
+      "nameEn": "Yuva Galam / Nirudyoga Bruthi",
+      "category": "youth",
+      "icon": "👨‍💼",
+      "badgeText": "₹3,000/మాసం",
+      "priority": "super6",
+      "fields": ["is_ap_resident","age","is_unemployed","education_level","income_annual"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "age_min": 21,
+        "age_max": 35,
+        "is_unemployed": true,
+        "education_level_min": "SSC",
+        "income_annual_max": 200000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "విద్యార్హత ధృవపత్రాలు", "nameEn": "Education Certificates", "icon": "🎓" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "నిరుద్యోగ నమోదు", "nameEn": "Employment Exchange Registration", "icon": "📝" }
+      ]
+    },
+    {
+      "id": "aadabiddanidhi",
+      "type": "scheme",
+      "nameTe": "ఆడబిడ్డ నిధి",
+      "nameEn": "Aadabidda Nidhi",
+      "category": "women",
+      "icon": "👩",
+      "badgeText": "₹1,500/మాసం",
+      "priority": "normal",
+      "fields": ["is_ap_resident","gender","age","caste","existing_scheme_enrollment"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "gender": "Female",
+        "age_min": 21,
+        "age_max": 60,
+        "caste": ["SC","ST","BC","Minority"],
+        "existing_scheme_enrollment": false
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "pellikanuka",
+      "type": "scheme",
+      "nameTe": "చంద్రన్న పెళ్ళి కానుక",
+      "nameEn": "Chandranna Pelli Kanuka",
+      "category": "women",
+      "icon": "💒",
+      "badgeText": "₹1,00,000",
+      "priority": "normal",
+      "fields": ["is_ap_resident","bride_community","income_annual","ration_card_type"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "bride_community": ["SC","ST","BC","Minority","Disabled"],
+        "income_annual_max": 200000,
+        "ration_card_type": ["White"]
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "వివాహ ఆహ్వాన పత్రిక", "nameEn": "Wedding Invitation", "icon": "💌" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "రేషన్ కార్డ్", "nameEn": "Ration Card", "icon": "📋" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "pmaygramin",
+      "type": "scheme",
+      "nameTe": "పీఎం ఆవాస్ యోజన (గ్రామీణ)",
+      "nameEn": "PMAY-Gramin",
+      "category": "housing",
+      "icon": "🏠",
+      "badgeText": "₹1,20,000",
+      "priority": "normal",
+      "fields": ["is_ap_resident","has_pucca_house","income_annual","ration_card_type","is_govt_employee"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "has_pucca_house": false,
+        "income_annual_max": 120000,
+        "ration_card_type": ["White","Yellow"],
+        "is_govt_employee": false
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "రేషన్ కార్డ్", "nameEn": "Ration Card", "icon": "📋" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "భూమి పత్రాలు", "nameEn": "Land Documents", "icon": "📜" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" }
+      ]
+    },
+    {
+      "id": "aphousing",
+      "type": "scheme",
+      "nameTe": "ఏపీ గృహ పథకం",
+      "nameEn": "AP Housing Scheme",
+      "category": "housing",
+      "icon": "🏡",
+      "badgeText": "₹2,00,000",
+      "priority": "normal",
+      "fields": ["is_ap_resident","caste","has_pucca_house","income_annual"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "caste": ["SC","ST","BC","Minority","EWS"],
+        "has_pucca_house": false,
+        "income_annual_max": 150000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "భూమి పత్రాలు", "nameEn": "Land Documents", "icon": "📜" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "postmatricrtf",
+      "type": "scheme",
+      "nameTe": "పోస్ట్ మెట్రిక్ RTF",
+      "nameEn": "Post Matric RTF",
+      "category": "education",
+      "icon": "🎓",
+      "badgeText": "ఫీజు రీయింబర్స్మెంట్",
+      "priority": "normal",
+      "fields": ["is_ap_resident","caste","education_level","income_annual"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "caste": ["SC","ST","BC"],
+        "education_level": ["Intermediate","Degree","PG"],
+        "income_annual_max": 250000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "కళాశాల అడ్మిషన్ రుజువు", "nameEn": "College Admission Proof", "icon": "🏫" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "ఫీజు రసీదు", "nameEn": "Fee Receipt", "icon": "🧾" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" }
+      ]
+    },
+    {
+      "id": "postmatricmtf",
+      "type": "scheme",
+      "nameTe": "పోస్ట్ మెట్రిక్ MTF",
+      "nameEn": "Post Matric MTF",
+      "category": "education",
+      "icon": "🏫",
+      "badgeText": "మెయింటెనెన్స్ భత్యం",
+      "priority": "normal",
+      "fields": ["is_ap_resident","caste","education_level","income_annual"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "caste": ["SC","ST","BC"],
+        "education_level": ["Intermediate","Degree","PG"],
+        "income_annual_max": 250000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "కళాశాల అడ్మిషన్ రుజువు", "nameEn": "College Admission Proof", "icon": "🏫" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "హాజరు సర్టిఫికెట్", "nameEn": "Attendance Certificate", "icon": "📝" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" }
+      ]
+    },
+    {
+      "id": "ntrvidyonnathi",
+      "type": "scheme",
+      "nameTe": "ఎన్టీఆర్ విద్యోన్నతి",
+      "nameEn": "NTR Vidyonnathi",
+      "category": "education",
+      "icon": "📚",
+      "badgeText": "UPSC ఉచిత కోచింగ్",
+      "priority": "normal",
+      "fields": ["is_ap_resident","age","education_level","income_annual","exam_type"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "age_min": 21,
+        "age_max": 35,
+        "education_level": ["Degree","PG"],
+        "income_annual_max": 200000,
+        "exam_type": ["UPSC","APPSC","Group exams"]
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "డిగ్రీ సర్టిఫికెట్", "nameEn": "Degree Certificate", "icon": "🎓" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "ambedkaroverseas",
+      "type": "scheme",
+      "nameTe": "అంబేద్కర్ ఓవర్సీస్ విద్యానిధి",
+      "nameEn": "Ambedkar Overseas Vidya Nidhi",
+      "category": "education",
+      "icon": "✈️",
+      "badgeText": "₹20,00,000 వరకు",
+      "priority": "normal",
+      "fields": ["is_ap_resident","caste","foreign_university_admission","income_annual"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "caste": ["SC","ST","BC","Minority"],
+        "foreign_university_admission": true,
+        "income_annual_max": 600000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "విదేశీ యూనివర్సిటీ అడ్మిషన్ లెటర్", "nameEn": "Foreign University Admission Letter", "icon": "✉️" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "పాస్‌పోర్ట్", "nameEn": "Passport", "icon": "🛂" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" }
+      ]
+    },
+    {
+      "id": "pmkisan",
+      "type": "scheme",
+      "nameTe": "పీఎం కిసాన్ సమ్మాన్ నిధి",
+      "nameEn": "PM Kisan Samman Nidhi",
+      "category": "agriculture",
+      "icon": "🚜",
+      "badgeText": "₹6,000/సంవత్సరం",
+      "priority": "normal",
+      "fields": ["is_ap_resident","is_registered_farmer","is_income_tax_payer","is_govt_employee"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "is_registered_farmer": true,
+        "is_income_tax_payer": false,
+        "is_govt_employee": false
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "భూమి రికార్డులు", "nameEn": "Land Records", "icon": "📋" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "nethannabharosa",
+      "type": "scheme",
+      "nameTe": "నేతన్న భరోసా",
+      "nameEn": "Nethanna Bharosa",
+      "category": "weavers",
+      "icon": "🧵",
+      "badgeText": "₹25,000/సంవత్సరం",
+      "priority": "normal",
+      "fields": ["is_ap_resident","is_weaver"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "is_weaver": true
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "నేత కార్మికుడి గుర్తింపు కార్డు", "nameEn": "Weaver Identity Card", "icon": "🪪" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "రేషన్ కార్డ్", "nameEn": "Ration Card", "icon": "📋" }
+      ]
+    },
+    {
+      "id": "adarana3",
+      "type": "scheme",
+      "nameTe": "ఆదరణ 3.0",
+      "nameEn": "Adarana 3.0",
+      "category": "scst",
+      "icon": "🛠️",
+      "badgeText": "ఉచిత పనిముట్లు",
+      "priority": "normal",
+      "fields": ["is_ap_resident","occupation","caste","ration_card_type"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "occupation": ["Toddy Tapper","Artisan","Weaver","Fisherman","Other"],
+        "caste": ["SC","ST","BC"],
+        "ration_card_type": ["White","Yellow"]
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "వృత్తి గుర్తింపు", "nameEn": "Occupation Proof", "icon": "📄" },
+        { "nameTe": "రేషన్ కార్డ్", "nameEn": "Ration Card", "icon": "📋" }
+      ]
+    },
+    {
+      "id": "ntrarogyaseva",
+      "type": "scheme",
+      "nameTe": "ఎన్టీఆర్ ఆరోగ్య సేవ",
+      "nameEn": "NTR Arogya Seva",
+      "category": "health",
+      "icon": "🏥",
+      "badgeText": "₹25 లక్షల వరకు చికిత్స",
+      "priority": "normal",
+      "fields": ["is_ap_resident","ration_card_type"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "ration_card_type": ["White","Yellow"]
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "రేషన్ కార్డ్", "nameEn": "Ration Card", "icon": "📋" },
+        { "nameTe": "ఆరోగ్య శ్రీ కార్డు", "nameEn": "Arogya Sri Card", "icon": "🏥" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "sccorploan",
+      "type": "scheme",
+      "nameTe": "ఎస్సీ కార్పొరేషన్ లోన్",
+      "nameEn": "SC Corporation Loan",
+      "category": "scst",
+      "icon": "💼",
+      "badgeText": "₹10,00,000 వరకు",
+      "priority": "normal",
+      "fields": ["is_ap_resident","caste","age","income_annual","marriage_purpose"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "caste": ["SC"],
+        "age_min": 18,
+        "age_max": 55,
+        "income_annual_max": 300000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "ప్రాజెక్ట్ రిపోర్ట్", "nameEn": "Project Report", "icon": "📝" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "bccorploan",
+      "type": "scheme",
+      "nameTe": "బీసీ కార్పొరేషన్ లోన్",
+      "nameEn": "BC Corporation Loan",
+      "category": "bc",
+      "icon": "🏪",
+      "badgeText": "₹10,00,000 వరకు",
+      "priority": "normal",
+      "fields": ["is_ap_resident","caste","age","income_annual","marriage_purpose"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "caste": ["BC"],
+        "age_min": 18,
+        "age_max": 55,
+        "income_annual_max": 300000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "కుల ధృవపత్రం", "nameEn": "Caste Certificate", "icon": "📋" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "ప్రాజెక్ట్ రిపోర్ట్", "nameEn": "Project Report", "icon": "📝" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోටో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "minorityshaadi",
+      "type": "scheme",
+      "nameTe": "మైనారిటీ షాదీ ముబారక్",
+      "nameEn": "Minority Shaadi Mubarak",
+      "category": "minority",
+      "icon": "🌙",
+      "badgeText": "₹1,00,000",
+      "priority": "normal",
+      "fields": ["is_ap_resident","caste","income_annual"],
+      "eligibility": {
+        "is_ap_resident": true,
+        "caste": ["Minority"],
+        "income_annual_max": 200000
+      },
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "మైనారిటీ ధృవపత్రం", "nameEn": "Minority Certificate", "icon": "📋" },
+        { "nameTe": "వివాహ ఆహ్వాన పత్రిక", "nameEn": "Wedding Invitation", "icon": "💌" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "బ్యాంక్ పాస్‌బుక్", "nameEn": "Bank Passbook", "icon": "🏦" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "castecert",
+      "type": "service",
+      "nameTe": "కుల ధృవపత్రం",
+      "nameEn": "Caste Certificate",
+      "category": "services",
+      "icon": "📋",
+      "badgeText": "5 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "తల్లిదండ్రుల కుల ధృవపత్రం", "nameEn": "Parent's Caste Certificate", "icon": "📋" },
+        { "nameTe": "పాఠశాల రికార్డులు", "nameEn": "School Records", "icon": "🏫" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" },
+        { "nameTe": "మీసేవ అప్లికేషన్ నంబర్", "nameEn": "MeeSeva Application Number", "icon": "🔢" }
+      ]
+    },
+    {
+      "id": "incomecert",
+      "type": "service",
+      "nameTe": "ఆదాయ ధృవపత్రం",
+      "nameEn": "Income Certificate",
+      "category": "services",
+      "icon": "💰",
+      "badgeText": "4 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "ఆదాయ రుజువు (జీతం స్లిప్/IT రిటర్న్)", "nameEn": "Income Proof (Salary Slip/IT Return)", "icon": "📄" },
+        { "nameTe": "రేషన్ కార్డ్", "nameEn": "Ration Card", "icon": "📋" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "residencecert",
+      "type": "service",
+      "nameTe": "నివాస ధృవపత్రం",
+      "nameEn": "Residence Certificate",
+      "category": "services",
+      "icon": "🏠",
+      "badgeText": "4 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "చిరునామా రుజువు", "nameEn": "Address Proof (Electricity/Water Bill)", "icon": "📄" },
+        { "nameTe": "వోటర్ ID", "nameEn": "Voter ID", "icon": "🪪" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "birthcert",
+      "type": "service",
+      "nameTe": "జన్మ ధృవపత్రం",
+      "nameEn": "Birth Certificate",
+      "category": "services",
+      "icon": "👶",
+      "badgeText": "4 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "తల్లిదండ్రుల ఆధార్ కార్డ్", "nameEn": "Parents Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "ఆసుపత్రి డిశ్చార్జ్ సమ్మరీ", "nameEn": "Hospital Discharge Summary", "icon": "🏥" },
+        { "nameTe": "వివాహ ధృవపత్రం", "nameEn": "Marriage Certificate", "icon": "💒" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo of Parents", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "deathcert",
+      "type": "service",
+      "nameTe": "మరణ ధృవపత్రం",
+      "nameEn": "Death Certificate",
+      "category": "services",
+      "icon": "📜",
+      "badgeText": "3 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "మృతుని ఆధార్ కార్డ్", "nameEn": "Deceased Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "దరఖాస్తుదారుని ఆధార్", "nameEn": "Applicant Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "మరణ రుజువు (వైద్యుని ధృవపత్రం)", "nameEn": "Death Proof (Medical Certificate)", "icon": "🏥" }
+      ]
+    },
+    {
+      "id": "marriagecert",
+      "type": "service",
+      "nameTe": "వివాహ ధృవపత్రం",
+      "nameEn": "Marriage Certificate",
+      "category": "services",
+      "icon": "💒",
+      "badgeText": "5 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "భార్య ఆధార్ కార్డ్", "nameEn": "Wife Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "భర్త ఆధార్ కార్డ్", "nameEn": "Husband Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "వివాహ ఫోటో", "nameEn": "Wedding Photo", "icon": "📸" },
+        { "nameTe": "వివాహ ఆహ్వాన పత్రిక", "nameEn": "Wedding Invitation", "icon": "💌" },
+        { "nameTe": "చిరునామా రుజువు", "nameEn": "Address Proof", "icon": "📄" }
+      ]
+    },
+    {
+      "id": "pattadarpassbook",
+      "type": "service",
+      "nameTe": "పట్టాదార్ పాస్‌బుక్",
+      "nameEn": "Pattadar Passbook",
+      "category": "services",
+      "icon": "📘",
+      "badgeText": "3 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ఆధార్ కార్డ్", "nameEn": "Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "భూమి పత్రాలు (సర్వే నంబర్)", "nameEn": "Land Documents (Survey Number)", "icon": "📜" },
+        { "nameTe": "పాస్‌పోర్ట్ ఫోటో", "nameEn": "Passport Photo", "icon": "📸" }
+      ]
+    },
+    {
+      "id": "rationcardnew",
+      "type": "service",
+      "nameTe": "కొత్త రేషన్ కార్డు",
+      "nameEn": "Ration Card - New",
+      "category": "services",
+      "icon": "🆕",
+      "badgeText": "5 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "కుటుంబ సభ్యుల ఆధార్ కార్డులు", "nameEn": "Family Members Aadhaar Cards", "icon": "🪪" },
+        { "nameTe": "చిరునామా రుజువు", "nameEn": "Address Proof", "icon": "📄" },
+        { "nameTe": "ఆదాయ ధృవపత్రం", "nameEn": "Income Certificate", "icon": "📄" },
+        { "nameTe": "కుటుంబ సభ్యుల ఫోటోలు", "nameEn": "Family Photos", "icon": "📸" },
+        { "nameTe": "గ్యాస్/కరెంట్ బిల్", "nameEn": "Gas/Electricity Bill", "icon": "🧾" }
+      ]
+    },
+    {
+      "id": "rationcardadd",
+      "type": "service",
+      "nameTe": "రేషన్ కార్డు - సభ్యుని చేర్పు",
+      "nameEn": "Ration Card - Member Addition",
+      "category": "services",
+      "icon": "➕",
+      "badgeText": "3 పత్రాలు",
+      "priority": "normal",
+      "fields": [],
+      "eligibility": {},
+      "benefitBySubType": {},
+      "documents": [
+        { "nameTe": "ప్రస్తుత రేషన్ కార్డ్", "nameEn": "Existing Ration Card", "icon": "📋" },
+        { "nameTe": "చేర్చాల్సిన సభ్యుని ఆధార్", "nameEn": "New Member Aadhaar Card", "icon": "🪪" },
+        { "nameTe": "జనన/వివాహ ధృవపత్రం", "nameEn": "Birth/Marriage Certificate", "icon": "📄" }
+      ]
+    }
+  ]
+}

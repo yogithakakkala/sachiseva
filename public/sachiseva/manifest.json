@@ -1,0 +1,14 @@
+{
+  "name": "SachiSeva - సాచిసేవ",
+  "short_name": "SachiSeva",
+  "description": "AP Sachivalayam Welfare Eligibility App",
+  "theme_color": "#0A3D62",
+  "background_color": "#0A3D62",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "./index.html",
+  "icons": [
+    { "src": "public/favicon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "public/icon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
