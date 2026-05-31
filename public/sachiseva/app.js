@@ -1227,8 +1227,12 @@
           </div>`;
       }).join('')}
       <button class="btn-primary" onclick="app.saveProfile()">
-        <span lang="te">వివరాలు సేవ్ చేయండి</span>
-        <span lang="en" style="font-size:11px;">Save Profile</span>
+        <span lang="te">వివరాలు సేవ్ & అర్హత తనిఖీ</span>
+        <span lang="en" style="font-size:11px;">Save & Find Eligible Schemes</span>
+      </button>
+      <button class="btn-secondary" style="margin-top:8px;width:100%;" onclick="app.findMyEligibleSchemes()">
+        <span lang="te">🎯 నా అర్హత పథకాలు చూపించు</span>
+        <span lang="en" style="font-size:11px;">Show My Eligible Schemes</span>
       </button>`;
   }
 
