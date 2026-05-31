@@ -1812,6 +1812,7 @@
     shareChecklist,
     openServiceChecklist,
     saveProfile,
+    findMyEligibleSchemes,
     toggleVoice,
     installApp,
     dismissInstall,
