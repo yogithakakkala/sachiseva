@@ -1,5 +1,5 @@
 // TO UPDATE SCHEME DATA: 1) edit schemes.json 2) bump CACHE_VERSION below 3) redeploy
-const CACHE_VERSION = 'sachiseva-v2';
+const CACHE_VERSION = 'sachiseva-v3';
 const ASSETS_TO_CACHE = [
   './index.html',
   './style.css',
