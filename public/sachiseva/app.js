@@ -1227,8 +1227,12 @@
           </div>`;
       }).join('')}
       <button class="btn-primary" onclick="app.saveProfile()">
-        <span lang="te">వివరాలు సేవ్ చేయండి</span>
-        <span lang="en" style="font-size:11px;">Save Profile</span>
+        <span lang="te">వివరాలు సేవ్ & అర్హత తనిఖీ</span>
+        <span lang="en" style="font-size:11px;">Save & Find Eligible Schemes</span>
+      </button>
+      <button class="btn-secondary" style="margin-top:8px;width:100%;" onclick="app.findMyEligibleSchemes()">
+        <span lang="te">🎯 నా అర్హత పథకాలు చూపించు</span>
+        <span lang="en" style="font-size:11px;">Show My Eligible Schemes</span>
       </button>`;
   }
 
@@ -1253,9 +1257,134 @@
     try {
       localStorage.setItem('citizenProfile', JSON.stringify(profile));
       showToast('✅ వివరాలు సేవ్ చేయబడ్డాయి', 'Profile saved successfully');
+      // Auto-run eligibility matcher
+      setTimeout(() => findMyEligibleSchemes(), 300);
     } catch (e) {
       showToast('ప్రైవేట్ మోడ్‌లో వివరాలు సేవ్ కాదు', 'Details won\'t be saved in private mode');
     }
+  }
+
+  // ========== ELIGIBILITY MATCHER ==========
+  function findMyEligibleSchemes() {
+    const profile = getCitizenProfile();
+    if (!profile || !profile.age || !profile.gender) {
+      showToast('మొదట మీ వివరాలు పూర్తి చేయండి', 'Please complete your profile first (age & gender required)');
+      showScreen('help');
+      return;
+    }
+    if (!schemesData) return;
+
+    const defaults = {
+      is_govt_employee: 'no', is_income_tax_payer: 'no', has_pucca_house: 'no',
+      has_lpg: 'no', is_registered_farmer: 'no', is_weaver: 'no',
+      is_unemployed: 'no', is_ap_resident: 'yes', child_in_school: 'no',
+      foreign_university_admission: 'no', existing_scheme_enrollment: 'no',
+      marriage_purpose: 'no', pension_type: profile.age >= 60 ? 'old_age' : 'widow',
+      house_value: 0, land_acres: 0, disability_percent: 0,
+      occupation: 'Other', bride_community: profile.caste || 'BC',
+      education_level: 'Below 10th', child_class: 'Class 5',
+      exam_type: 'UPSC', marital_status: 'Married',
+      income_annual: (profile.income_monthly || 0) * 12
+    };
+
+    const eligible = [];
+    const ineligible = [];
+    const schemes = schemesData.schemes.filter(s => s.type === 'scheme');
+
+    schemes.forEach(scheme => {
+      const formData = {};
+      (scheme.fields || []).forEach(fid => {
+        if (profile[fid] !== undefined && profile[fid] !== null && profile[fid] !== '') {
+          formData[fid] = profile[fid];
+        } else if (defaults[fid] !== undefined) {
+          formData[fid] = defaults[fid];
+        } else {
+          formData[fid] = null;
+        }
+      });
+      try {
+        const res = checkEligibility(scheme, formData);
+        if (res.eligible) eligible.push({ scheme, benefitAmount: res.benefitAmount });
+        else ineligible.push({ scheme, reason: res.reason });
+      } catch (e) { /* skip */ }
+    });
+
+    const services = schemesData.schemes.filter(s => s.type === 'service');
+
+    const modal = $('#eligibility-modal');
+    const body = $('#modal-body');
+    if (!modal || !body) return;
+
+    body.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:48px;">🎯</div>
+        <h2 lang="te" style="margin:4px 0;">మీ అర్హత ఫలితాలు</h2>
+        <p lang="en" style="font-size:12px;color:var(--text-secondary);">Your Personalized Eligibility Results</p>
+      </div>
+
+      <div class="card" style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9);margin-bottom:16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#1B5E20;">${eligible.length}</div>
+        <div lang="te" style="font-weight:600;">పథకాలకు అర్హులు</div>
+        <div lang="en" style="font-size:11px;">Schemes you qualify for</div>
+      </div>
+
+      ${eligible.length === 0
+        ? '<div class="card" style="text-align:center;padding:16px;"><p lang="te">సరిపోలే పథకాలు కనుగొనబడలేదు</p><p lang="en" style="font-size:11px;color:var(--text-secondary);">No matching schemes found. Try updating your profile.</p></div>'
+        : `<h3 lang="te" style="font-size:14px;margin:12px 0 8px;">✅ అర్హత ఉన్న పథకాలు</h3>` +
+          eligible.map(({ scheme, benefitAmount }) => `
+            <div class="card mb-12" onclick="app.closeModal();app.openSchemeModal('${scheme.id}')" style="cursor:pointer;border-left:4px solid #2E7D32;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:32px;">${scheme.icon}</span>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-weight:700;font-size:14px;" lang="te">${scheme.nameTe}</div>
+                  <div style="font-size:11px;color:var(--text-secondary);" lang="en">${scheme.nameEn}</div>
+                  ${benefitAmount ? `<div class="card-badge" style="margin-top:4px;background:#2E7D32;color:#fff;">${benefitAmount}</div>` : ''}
+                </div>
+                <span style="color:var(--accent);font-weight:700;">→</span>
+              </div>
+            </div>`).join('')
+      }
+
+      <h3 lang="te" style="font-size:14px;margin:20px 0 8px;padding-top:12px;border-top:1px solid #eee;">📄 సచివాలయం సేవలు (${services.length})</h3>
+      <p lang="en" style="font-size:10px;color:var(--text-secondary);margin-bottom:8px;">Certificate services available to all citizens</p>
+      ${services.map(s => `
+        <div class="card mb-12" onclick="app.closeModal();app.openServiceChecklist('${s.id}')" style="cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">${s.icon}</span>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:600;font-size:13px;" lang="te">${s.nameTe}</div>
+              <div style="font-size:11px;color:var(--text-secondary);" lang="en">${s.nameEn}</div>
+            </div>
+            <span style="color:var(--accent);">→</span>
+          </div>
+        </div>`).join('')}
+
+      ${ineligible.length > 0 ? `
+        <details style="margin-top:16px;">
+          <summary style="cursor:pointer;font-size:12px;color:var(--text-secondary);padding:8px;">
+            <span lang="te">అర్హత లేని పథకాలు చూపించు (${ineligible.length})</span> /
+            <span lang="en">Show ineligible schemes</span>
+          </summary>
+          <div style="margin-top:8px;">
+            ${ineligible.map(({ scheme, reason }) => `
+              <div class="card mb-12" style="opacity:0.7;border-left:4px solid #C62828;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:24px;">${scheme.icon}</span>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:600;font-size:13px;" lang="te">${scheme.nameTe}</div>
+                    <div style="font-size:10px;color:#C62828;" lang="en">${reason.en || ''}</div>
+                  </div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </details>` : ''}
+
+      <p style="font-size:10px;color:var(--text-secondary);margin-top:16px;padding:8px;background:#FFF3CD;border-radius:6px;text-align:center;" lang="en">
+        ⚠️ Indicative guidance only. Final eligibility is determined by Sachivalayam officials.
+      </p>`;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   // ========== VOICE SYSTEM ==========
@@ -1683,6 +1812,7 @@
     shareChecklist,
     openServiceChecklist,
     saveProfile,
+    findMyEligibleSchemes,
     toggleVoice,
     installApp,
     dismissInstall,
