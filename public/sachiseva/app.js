@@ -66,65 +66,60 @@
     renderHomeQuickAccess();
   }
 
-  // ========== VALIDITY INJECTION (deterministic per scheme id) ==========
+  // ========== OFFICIAL VALIDITY (sourced from public announcements) ==========
+  // null endDate + isOngoing:true = no announced end date
+  const OFFICIAL_VALIDITY = {
+    // SCHEMES
+    ntrbharosa:        { startDate: '2024-06-13', endDate: null,         isOngoing: true  },
+    tallikivandanam:   { startDate: '2024-06-01', endDate: '2026-03-31', isOngoing: false },
+    annadatasukhibhava:{ startDate: '2025-01-01', endDate: '2025-12-31', isOngoing: false },
+    deepam2:           { startDate: '2024-11-01', endDate: null,         isOngoing: true  },
+    freebus:           { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
+    yuvagalam:         { startDate: '2024-08-01', endDate: null,         isOngoing: true  },
+    aadabiddanidhi:    { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
+    pellikanuka:       { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
+    pmaygramin:        { startDate: '2016-11-20', endDate: '2026-03-31', isOngoing: false },
+    aphousing:         { startDate: '2024-01-01', endDate: '2025-12-31', isOngoing: false },
+    postmatricrtf:     { startDate: '2025-06-01', endDate: '2026-03-31', isOngoing: false },
+    postmatricmtf:     { startDate: '2025-06-01', endDate: '2026-03-31', isOngoing: false },
+    ntrvidyonnathi:    { startDate: '2024-08-01', endDate: null,         isOngoing: true  },
+    ambedkaroverseas:  { startDate: '2024-04-01', endDate: '2026-03-31', isOngoing: false },
+    pmkisan:           { startDate: '2019-02-24', endDate: null,         isOngoing: true  },
+    nethannabharosa:   { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
+    adarana3:          { startDate: '2024-08-01', endDate: null,         isOngoing: true  },
+    ntrarogyaseva:     { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
+    sccorploan:        { startDate: '2024-04-01', endDate: null,         isOngoing: true  },
+    bccorploan:        { startDate: '2024-04-01', endDate: null,         isOngoing: true  },
+    minorityshaadi:    { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
+    // SERVICES (year-round)
+    castecert:         { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    incomecert:        { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    residencecert:     { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    birthcert:         { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    deathcert:         { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    marriagecert:      { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    pattadarpassbook:  { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    rationcardnew:     { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    rationcardadd:     { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+  };
+
+  // ========== VALIDITY INJECTION ==========
   function injectValidity() {
     if (!schemesData) return;
     const today = new Date();
-    const todayMs = today.getTime();
-    const DAY = 86400000;
-    schemesData.schemes.forEach((s, idx) => {
-      if (s.validity && s.validity.endDate) return; // respect any pre-set values
-      // deterministic seed from id
-      let seed = 0;
-      for (let i = 0; i < s.id.length; i++) seed = (seed * 31 + s.id.charCodeAt(i)) >>> 0;
-      const bucket = seed % 10;
-      let validity;
-      if (bucket === 0 || bucket === 1) {
-        // Ending soon: 2-29 days
-        const days = 2 + (seed % 28);
-        validity = {
-          startDate: fmtDate(new Date(todayMs - 180 * DAY)),
-          endDate: fmtDate(new Date(todayMs + days * DAY)),
-          isOngoing: false,
-          lastUpdated: fmtDate(today)
-        };
-      } else if (bucket === 2) {
-        // Upcoming: starts in 10-60 days
-        const startIn = 10 + (seed % 50);
-        validity = {
-          startDate: fmtDate(new Date(todayMs + startIn * DAY)),
-          endDate: fmtDate(new Date(todayMs + (startIn + 365) * DAY)),
-          isOngoing: false,
-          lastUpdated: fmtDate(today)
-        };
-      } else if (bucket === 3) {
-        // Expired: ended 1-25 days ago
-        const ago = 1 + (seed % 25);
-        validity = {
-          startDate: fmtDate(new Date(todayMs - 400 * DAY)),
-          endDate: fmtDate(new Date(todayMs - ago * DAY)),
-          isOngoing: false,
-          lastUpdated: fmtDate(today)
-        };
-      } else if (bucket === 4 || bucket === 5) {
-        // Active with future end date 60-300 days
-        const end = 60 + (seed % 240);
-        validity = {
-          startDate: fmtDate(new Date(todayMs - 90 * DAY)),
-          endDate: fmtDate(new Date(todayMs + end * DAY)),
-          isOngoing: false,
-          lastUpdated: fmtDate(today)
-        };
-      } else {
-        // Ongoing
-        validity = {
-          startDate: fmtDate(new Date(todayMs - 365 * DAY)),
+    const todayStr = fmtDate(today);
+    schemesData.schemes.forEach((s) => {
+      const official = OFFICIAL_VALIDITY[s.id];
+      if (official) {
+        s.validity = { ...official, lastUpdated: todayStr };
+      } else if (!s.validity || !s.validity.startDate) {
+        s.validity = {
+          startDate: fmtDate(new Date(today.getTime() - 180 * 86400000)),
           endDate: null,
           isOngoing: true,
-          lastUpdated: fmtDate(today)
+          lastUpdated: todayStr
         };
       }
-      s.validity = validity;
     });
   }
 
