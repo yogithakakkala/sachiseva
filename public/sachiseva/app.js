@@ -225,10 +225,13 @@
       minority: '#4CAF50', services: '#3F51B5'
     };
 
+    const tracked = getTrackedSet();
     grid.innerHTML = schemes.map(s => {
       const overrideBadge = s._hasOverride ? ' <span style="color:#F0A500;font-size:10px;">✓</span>' : '';
+      const isTracked = tracked.has(s.id);
       return `
         <div class="scheme-card ${s.category}" onclick="app.openSchemeModal('${s.id}')" role="button" aria-label="${s.nameTe} - ${s.nameEn}">
+          <button class="card-star ${isTracked ? 'tracked' : ''}" onclick="event.stopPropagation();app.toggleTracked('${s.id}')" aria-label="Save to tracker" title="Save to Tracker">${isTracked ? '★' : '☆'}</button>
           <div class="card-icon">${s.icon}</div>
           <div class="card-name-te"><span lang="te">${s.nameTe}</span>${overrideBadge}</div>
           <div class="card-name-en"><span lang="en">${s.nameEn}</span></div>
