@@ -2078,6 +2078,7 @@
     saveSchemeOverride,
     resetAllOverrides,
     navigateToCategory,
+    toggleTracked,
     showToast
   };
 
