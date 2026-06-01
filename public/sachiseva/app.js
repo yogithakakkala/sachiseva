@@ -1870,6 +1870,186 @@
     }, 3000);
   }
 
+  // ========== TRACKER ==========
+  function getTrackedSet() {
+    try {
+      const arr = JSON.parse(localStorage.getItem('trackedSchemes') || '[]');
+      return new Set(Array.isArray(arr) ? arr : []);
+    } catch (e) { return new Set(); }
+  }
+
+  function toggleTracked(schemeId) {
+    const set = getTrackedSet();
+    if (set.has(schemeId)) {
+      set.delete(schemeId);
+      showToast('⭐ తీసివేయబడింది / Removed');
+    } else {
+      set.add(schemeId);
+      showToast('⭐ సేవ్ చేయబడింది / Saved to Tracker');
+    }
+    localStorage.setItem('trackedSchemes', JSON.stringify([...set]));
+    if (currentScreen === 'schemes') renderSchemesScreen();
+    if (currentScreen === 'tracker') renderTrackerScreen();
+  }
+
+  function classifyScheme(s) {
+    const v = s.validity;
+    if (!v) return 'active';
+    if (v.isOngoing) return 'active';
+    const today = new Date(); today.setHours(0,0,0,0);
+    const todayMs = today.getTime();
+    const DAY = 86400000;
+    if (v.startDate) {
+      const start = new Date(v.startDate).getTime();
+      if (start > todayMs) return 'upcoming';
+    }
+    if (v.endDate) {
+      const end = new Date(v.endDate).getTime();
+      const diff = Math.ceil((end - todayMs) / DAY);
+      if (diff < 0) return 'expired';
+      if (diff <= 30) return 'ending';
+      return 'active';
+    }
+    return 'active';
+  }
+
+  function daysUntil(dateStr) {
+    if (!dateStr) return null;
+    const today = new Date(); today.setHours(0,0,0,0);
+    return Math.ceil((new Date(dateStr).getTime() - today.getTime()) / 86400000);
+  }
+
+  function renderTrackerScreen() {
+    if (!schemesData) return;
+    const container = $('#tracker-container');
+    if (!container) return;
+
+    const tracked = getTrackedSet();
+    const onlySchemes = schemesData.schemes.filter(s => s.type === 'scheme');
+
+    const groups = { ending: [], active: [], upcoming: [], expired: [] };
+    onlySchemes.forEach(s => groups[classifyScheme(s)].push(s));
+
+    // Sort ending by fewest days; pinned first within each group
+    const sortGroup = (arr, by) => {
+      arr.sort((a, b) => {
+        const at = tracked.has(a.id) ? 0 : 1;
+        const bt = tracked.has(b.id) ? 0 : 1;
+        if (at !== bt) return at - bt;
+        if (by === 'ending') {
+          return (daysUntil(a.validity?.endDate) ?? 999) - (daysUntil(b.validity?.endDate) ?? 999);
+        }
+        if (by === 'upcoming') {
+          return (daysUntil(a.validity?.startDate) ?? 999) - (daysUntil(b.validity?.startDate) ?? 999);
+        }
+        return 0;
+      });
+    };
+    sortGroup(groups.ending, 'ending');
+    sortGroup(groups.upcoming, 'upcoming');
+    sortGroup(groups.active);
+    sortGroup(groups.expired);
+
+    const sections = [
+      { key: 'ending',   te: 'ముగుస్తున్నాయి', en: 'Ending Soon', emoji: '⏰', color: 'var(--warning)' },
+      { key: 'active',   te: 'చురుకుగా ఉన్నాయి', en: 'Active', emoji: '✅', color: 'var(--success)' },
+      { key: 'upcoming', te: 'రాబోయేవి', en: 'Upcoming', emoji: '🚀', color: 'var(--primary)' },
+      { key: 'expired',  te: 'ముగిసినవి', en: 'Expired', emoji: '🚫', color: 'var(--danger)' }
+    ];
+
+    container.innerHTML = sections.map(sec => {
+      const arr = groups[sec.key];
+      const header = `
+        <div class="tracker-section-header" style="border-left-color:${sec.color};">
+          <span class="tsh-emoji">${sec.emoji}</span>
+          <div>
+            <div class="tsh-te" lang="te">${sec.te}</div>
+            <div class="tsh-en" lang="en">${sec.en} (${arr.length})</div>
+          </div>
+        </div>`;
+      if (!arr.length) {
+        return header + `<div class="tracker-empty"><span lang="te">ఏదీ లేదు</span> · <span lang="en">None</span></div>`;
+      }
+      return header + `<div class="tracker-list">${arr.map(s => renderTrackerCard(s, sec.key, tracked.has(s.id))).join('')}</div>`;
+    }).join('');
+
+    // Event delegation for star toggle + checklist button
+    container.onclick = (e) => {
+      const star = e.target.closest('[data-action="toggle-track"]');
+      if (star) { e.stopPropagation(); toggleTracked(star.dataset.id); return; }
+      const cl = e.target.closest('[data-action="open-checklist"]');
+      if (cl) { currentChecklistSchemeId = cl.dataset.id; showScreen('checklist'); return; }
+    };
+  }
+
+  function renderTrackerCard(s, kind, isTracked) {
+    const v = s.validity || {};
+    let countdown = '';
+    let badgeText = '';
+    let badgeColor = 'var(--success)';
+    let numColor = 'var(--success)';
+
+    if (kind === 'ending') {
+      const d = daysUntil(v.endDate);
+      const big = d <= 7 ? 'var(--danger)' : 'var(--warning)';
+      numColor = big;
+      badgeColor = 'var(--warning)';
+      badgeText = `<span lang="te">ముగుస్తోంది</span> · Ending`;
+      countdown = `<div class="tc-count" style="color:${big};">${d}</div>
+        <div class="tc-count-label"><span lang="te">రోజులు మిగిలాయి</span><br><span lang="en">days remaining</span></div>`;
+    } else if (kind === 'upcoming') {
+      const d = daysUntil(v.startDate);
+      numColor = 'var(--primary)';
+      badgeColor = 'var(--primary)';
+      badgeText = `<span lang="te">రాబోయేది</span> · Upcoming`;
+      countdown = `<div class="tc-count" style="color:var(--primary);">${d}</div>
+        <div class="tc-count-label"><span lang="te">రోజుల్లో ప్రారంభం</span><br><span lang="en">days to start</span></div>`;
+    } else if (kind === 'expired') {
+      const d = Math.abs(daysUntil(v.endDate));
+      badgeColor = 'var(--danger)';
+      badgeText = `<span lang="te">ముగిసింది</span> · Expired`;
+      countdown = `<div class="tc-count" style="color:var(--danger);">−${d}</div>
+        <div class="tc-count-label"><span lang="en">days ago</span></div>`;
+    } else {
+      // active
+      badgeColor = 'var(--success)';
+      if (v.isOngoing) {
+        badgeText = `<span lang="te">నిరంతరం</span> · Ongoing`;
+        countdown = `<div class="tc-count" style="color:var(--success);font-size:22px;">∞</div>
+          <div class="tc-count-label"><span lang="te">నిరంతరం</span></div>`;
+      } else {
+        const d = daysUntil(v.endDate);
+        badgeText = `<span lang="te">చురుకుగా</span> · Active`;
+        countdown = `<div class="tc-count" style="color:var(--success);">${d}</div>
+          <div class="tc-count-label"><span lang="te">రోజులు మిగిలాయి</span></div>`;
+      }
+    }
+
+    const dateLine = v.isOngoing
+      ? `<span lang="te">ప్రారంభం:</span> ${v.startDate || '—'} · <span lang="te">నిరంతరం</span>`
+      : `${v.startDate || '—'} → ${v.endDate || '—'}`;
+
+    return `
+      <div class="tracker-card ${kind}">
+        <button class="card-star ${isTracked ? 'tracked' : ''}" data-action="toggle-track" data-id="${s.id}" aria-label="Toggle save">${isTracked ? '★' : '☆'}</button>
+        <div class="tc-main">
+          <div class="tc-head">
+            <span class="tc-icon">${s.icon}</span>
+            <div class="tc-titles">
+              <div class="tc-te" lang="te">${s.nameTe}</div>
+              <div class="tc-en" lang="en">${s.nameEn}</div>
+            </div>
+          </div>
+          <div class="tc-badge" style="background:${badgeColor};">${badgeText}</div>
+          <div class="tc-dates">${dateLine}</div>
+          <button class="tc-cta" data-action="open-checklist" data-id="${s.id}">
+            <span lang="te">చెక్‌లిస్ట్ చూడండి</span> · View Checklist
+          </button>
+        </div>
+        <div class="tc-countdown">${countdown}</div>
+      </div>`;
+  }
+
   // ========== GLOBAL EXPOSURES ==========
   window.app = {
     showScreen,
