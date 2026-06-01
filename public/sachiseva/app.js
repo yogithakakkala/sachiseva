@@ -62,7 +62,77 @@
     }
     // Merge admin overrides
     mergeOverrides();
+    injectValidity();
     renderHomeQuickAccess();
+  }
+
+  // ========== VALIDITY INJECTION (deterministic per scheme id) ==========
+  function injectValidity() {
+    if (!schemesData) return;
+    const today = new Date();
+    const todayMs = today.getTime();
+    const DAY = 86400000;
+    schemesData.schemes.forEach((s, idx) => {
+      if (s.validity && s.validity.endDate) return; // respect any pre-set values
+      // deterministic seed from id
+      let seed = 0;
+      for (let i = 0; i < s.id.length; i++) seed = (seed * 31 + s.id.charCodeAt(i)) >>> 0;
+      const bucket = seed % 10;
+      let validity;
+      if (bucket === 0 || bucket === 1) {
+        // Ending soon: 2-29 days
+        const days = 2 + (seed % 28);
+        validity = {
+          startDate: fmtDate(new Date(todayMs - 180 * DAY)),
+          endDate: fmtDate(new Date(todayMs + days * DAY)),
+          isOngoing: false,
+          lastUpdated: fmtDate(today)
+        };
+      } else if (bucket === 2) {
+        // Upcoming: starts in 10-60 days
+        const startIn = 10 + (seed % 50);
+        validity = {
+          startDate: fmtDate(new Date(todayMs + startIn * DAY)),
+          endDate: fmtDate(new Date(todayMs + (startIn + 365) * DAY)),
+          isOngoing: false,
+          lastUpdated: fmtDate(today)
+        };
+      } else if (bucket === 3) {
+        // Expired: ended 1-25 days ago
+        const ago = 1 + (seed % 25);
+        validity = {
+          startDate: fmtDate(new Date(todayMs - 400 * DAY)),
+          endDate: fmtDate(new Date(todayMs - ago * DAY)),
+          isOngoing: false,
+          lastUpdated: fmtDate(today)
+        };
+      } else if (bucket === 4 || bucket === 5) {
+        // Active with future end date 60-300 days
+        const end = 60 + (seed % 240);
+        validity = {
+          startDate: fmtDate(new Date(todayMs - 90 * DAY)),
+          endDate: fmtDate(new Date(todayMs + end * DAY)),
+          isOngoing: false,
+          lastUpdated: fmtDate(today)
+        };
+      } else {
+        // Ongoing
+        validity = {
+          startDate: fmtDate(new Date(todayMs - 365 * DAY)),
+          endDate: null,
+          isOngoing: true,
+          lastUpdated: fmtDate(today)
+        };
+      }
+      s.validity = validity;
+    });
+  }
+
+  function fmtDate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
 
   function mergeOverrides() {
