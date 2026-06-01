@@ -196,6 +196,7 @@
       case 'schemes': renderSchemesScreen(); break;
       case 'checklist': renderChecklistScreen(); break;
       case 'services': renderServicesScreen(); break;
+      case 'tracker': renderTrackerScreen(); break;
       case 'help': renderHelpScreen(); break;
     }
 
