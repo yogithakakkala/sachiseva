@@ -71,23 +71,23 @@
   const OFFICIAL_VALIDITY = {
     // SCHEMES
     ntrbharosa:        { startDate: '2024-06-13', endDate: null,         isOngoing: true  },
-    tallikivandanam:   { startDate: '2024-06-01', endDate: '2026-03-31', isOngoing: false },
-    annadatasukhibhava:{ startDate: '2025-01-01', endDate: '2025-12-31', isOngoing: false },
+    tallikivandanam:   { startDate: '2025-06-12', endDate: null,         isOngoing: true, note: 'Annual: Jun 12 – Jul 5' },
+    annadatasukhibhava:{ startDate: '2025-08-02', endDate: null,         isOngoing: true, note: '3 instalments per year' },
     deepam2:           { startDate: '2024-11-01', endDate: null,         isOngoing: true  },
-    freebus:           { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
-    yuvagalam:         { startDate: '2024-08-01', endDate: null,         isOngoing: true  },
-    aadabiddanidhi:    { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
+    freebus:           { startDate: '2025-08-15', endDate: null,         isOngoing: true  },
+    yuvagalam:         { startDate: null,         endDate: null,         isOngoing: false, notLaunched: true },
+    aadabiddanidhi:    { startDate: null,         endDate: null,         isOngoing: false, notLaunched: true },
     pellikanuka:       { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
-    pmaygramin:        { startDate: '2016-11-20', endDate: '2026-03-31', isOngoing: false },
-    aphousing:         { startDate: '2024-01-01', endDate: '2025-12-31', isOngoing: false },
-    postmatricrtf:     { startDate: '2025-06-01', endDate: '2026-03-31', isOngoing: false },
-    postmatricmtf:     { startDate: '2025-06-01', endDate: '2026-03-31', isOngoing: false },
-    ntrvidyonnathi:    { startDate: '2024-08-01', endDate: null,         isOngoing: true  },
-    ambedkaroverseas:  { startDate: '2024-04-01', endDate: '2026-03-31', isOngoing: false },
+    pmaygramin:        { startDate: '2016-11-20', endDate: null,         isOngoing: true  },
+    aphousing:         { startDate: '2024-01-01', endDate: null,         isOngoing: true  },
+    postmatricrtf:     { startDate: '2025-06-01', endDate: '2027-03-31', isOngoing: false, note: 'Renews each academic year' },
+    postmatricmtf:     { startDate: '2025-06-01', endDate: '2027-03-31', isOngoing: false, note: 'Renews each academic year' },
+    ntrvidyonnathi:    { startDate: '2025-06-26', endDate: null,         isOngoing: true, note: '9-month coaching batches' },
+    ambedkaroverseas:  { startDate: '2024-04-01', endDate: null,         isOngoing: true  },
     pmkisan:           { startDate: '2019-02-24', endDate: null,         isOngoing: true  },
-    nethannabharosa:   { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
-    adarana3:          { startDate: '2024-08-01', endDate: null,         isOngoing: true  },
-    ntrarogyaseva:     { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
+    nethannabharosa:   { startDate: '2025-08-07', endDate: null,         isOngoing: true  },
+    adarana3:          { startDate: '2025-09-01', endDate: null,         isOngoing: true  },
+    ntrarogyaseva:     { startDate: '2025-04-08', endDate: null,         isOngoing: true  },
     sccorploan:        { startDate: '2024-04-01', endDate: null,         isOngoing: true  },
     bccorploan:        { startDate: '2024-04-01', endDate: null,         isOngoing: true  },
     minorityshaadi:    { startDate: '2024-06-01', endDate: null,         isOngoing: true  },
@@ -1890,6 +1890,7 @@
   function classifyScheme(s) {
     const v = s.validity;
     if (!v) return 'active';
+    if (v.notLaunched) return 'upcoming';
     if (v.isOngoing) return 'active';
     const today = new Date(); today.setHours(0,0,0,0);
     const todayMs = today.getTime();
@@ -1993,12 +1994,18 @@
       countdown = `<div class="tc-count" style="color:${big};">${d}</div>
         <div class="tc-count-label"><span lang="te">రోజులు మిగిలాయి</span><br><span lang="en">days remaining</span></div>`;
     } else if (kind === 'upcoming') {
-      const d = daysUntil(v.startDate);
       numColor = 'var(--primary)';
       badgeColor = 'var(--primary)';
-      badgeText = `<span lang="te">రాబోయేది</span> · Upcoming`;
-      countdown = `<div class="tc-count" style="color:var(--primary);">${d}</div>
-        <div class="tc-count-label"><span lang="te">రోజుల్లో ప్రారంభం</span><br><span lang="en">days to start</span></div>`;
+      if (v.notLaunched) {
+        badgeText = `<span lang="te">త్వరలో</span> · Not Yet Launched`;
+        countdown = `<div class="tc-count" style="color:var(--primary);font-size:22px;">TBA</div>
+          <div class="tc-count-label"><span lang="te">ప్రకటించబడలేదు</span><br><span lang="en">date not announced</span></div>`;
+      } else {
+        const d = daysUntil(v.startDate);
+        badgeText = `<span lang="te">రాబోయేది</span> · Upcoming`;
+        countdown = `<div class="tc-count" style="color:var(--primary);">${d}</div>
+          <div class="tc-count-label"><span lang="te">రోజుల్లో ప్రారంభం</span><br><span lang="en">days to start</span></div>`;
+      }
     } else if (kind === 'expired') {
       const d = Math.abs(daysUntil(v.endDate));
       badgeColor = 'var(--danger)';
@@ -2020,9 +2027,11 @@
       }
     }
 
-    const dateLine = v.isOngoing
-      ? `<span lang="te">ప్రారంభం:</span> ${v.startDate || '—'} · <span lang="te">నిరంతరం</span>`
-      : `${v.startDate || '—'} → ${v.endDate || '—'}`;
+    const dateLine = v.notLaunched
+      ? `<span lang="te">ప్రారంభ తేదీ ప్రకటించబడలేదు</span> · Launch date TBA`
+      : v.isOngoing
+      ? `<span lang="te">ప్రారంభం:</span> ${v.startDate || '—'} · <span lang="te">నిరంతరం</span>${v.note ? ' · ' + v.note : ''}`
+      : `${v.startDate || '—'} → ${v.endDate || '—'}${v.note ? ' · ' + v.note : ''}`;
 
     return `
       <div class="tracker-card ${kind}">
