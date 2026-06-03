@@ -1994,12 +1994,18 @@
       countdown = `<div class="tc-count" style="color:${big};">${d}</div>
         <div class="tc-count-label"><span lang="te">రోజులు మిగిలాయి</span><br><span lang="en">days remaining</span></div>`;
     } else if (kind === 'upcoming') {
-      const d = daysUntil(v.startDate);
       numColor = 'var(--primary)';
       badgeColor = 'var(--primary)';
-      badgeText = `<span lang="te">రాబోయేది</span> · Upcoming`;
-      countdown = `<div class="tc-count" style="color:var(--primary);">${d}</div>
-        <div class="tc-count-label"><span lang="te">రోజుల్లో ప్రారంభం</span><br><span lang="en">days to start</span></div>`;
+      if (v.notLaunched) {
+        badgeText = `<span lang="te">త్వరలో</span> · Not Yet Launched`;
+        countdown = `<div class="tc-count" style="color:var(--primary);font-size:22px;">TBA</div>
+          <div class="tc-count-label"><span lang="te">ప్రకటించబడలేదు</span><br><span lang="en">date not announced</span></div>`;
+      } else {
+        const d = daysUntil(v.startDate);
+        badgeText = `<span lang="te">రాబోయేది</span> · Upcoming`;
+        countdown = `<div class="tc-count" style="color:var(--primary);">${d}</div>
+          <div class="tc-count-label"><span lang="te">రోజుల్లో ప్రారంభం</span><br><span lang="en">days to start</span></div>`;
+      }
     } else if (kind === 'expired') {
       const d = Math.abs(daysUntil(v.endDate));
       badgeColor = 'var(--danger)';
