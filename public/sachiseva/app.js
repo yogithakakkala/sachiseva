@@ -2027,9 +2027,11 @@
       }
     }
 
-    const dateLine = v.isOngoing
-      ? `<span lang="te">ప్రారంభం:</span> ${v.startDate || '—'} · <span lang="te">నిరంతరం</span>`
-      : `${v.startDate || '—'} → ${v.endDate || '—'}`;
+    const dateLine = v.notLaunched
+      ? `<span lang="te">ప్రారంభ తేదీ ప్రకటించబడలేదు</span> · Launch date TBA`
+      : v.isOngoing
+      ? `<span lang="te">ప్రారంభం:</span> ${v.startDate || '—'} · <span lang="te">నిరంతరం</span>${v.note ? ' · ' + v.note : ''}`
+      : `${v.startDate || '—'} → ${v.endDate || '—'}${v.note ? ' · ' + v.note : ''}`;
 
     return `
       <div class="tracker-card ${kind}">
