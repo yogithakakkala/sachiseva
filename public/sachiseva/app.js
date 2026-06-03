@@ -1890,6 +1890,7 @@
   function classifyScheme(s) {
     const v = s.validity;
     if (!v) return 'active';
+    if (v.notLaunched) return 'upcoming';
     if (v.isOngoing) return 'active';
     const today = new Date(); today.setHours(0,0,0,0);
     const todayMs = today.getTime();
