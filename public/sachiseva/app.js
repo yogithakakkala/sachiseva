@@ -2283,7 +2283,19 @@
     resetAllOverrides,
     navigateToCategory,
     toggleTracked,
-    showToast
+    showToast,
+    // Login / session
+    switchLoginTab,
+    loginPersonal,
+    loginAdmin,
+    loginGuest,
+    logout,
+    openAdminPanel,
+    // Admin extras
+    showAddScheme,
+    saveNewScheme,
+    showChangePin,
+    saveNewPin
   };
 
   // ========== STARTUP ==========
