@@ -33,7 +33,9 @@
     </div>
     <div class="header-center" lang="te">సాచిసేవ</div>
     <div class="header-right">
+      <button class="header-btn" id="admin-btn" onclick="app.openAdminPanel()" aria-label="Admin Panel" title="Admin" style="display:none;">🔧</button>
       <button class="header-btn active" id="voice-toggle" onclick="app.toggleVoice()" aria-label="Voice Toggle" title="Voice On/Off">🔊</button>
+      <button class="header-btn" id="logout-btn" onclick="app.logout()" aria-label="Logout" title="Logout" style="display:none;">⎋</button>
     </div>
   </header>
 
@@ -277,6 +279,59 @@
       </button>
     </div>
     <div id="admin-panel-body"></div>
+  </div>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div id="login-screen" class="login-screen" role="dialog" aria-modal="true" aria-label="Login">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-emblem">AP</div>
+        <h1 class="login-title">SachiSeva</h1>
+        <div class="login-sub" lang="te">సాచిసేవ — లాగిన్ చేయండి</div>
+        <div class="login-sub-en">Sign in to continue</div>
+      </div>
+
+      <div class="login-tabs" role="tablist">
+        <button class="login-tab active" data-tab="personal" onclick="app.switchLoginTab('personal')">
+          <span>👤</span> <span lang="te">పౌరుడు</span> / Personal
+        </button>
+        <button class="login-tab" data-tab="admin" onclick="app.switchLoginTab('admin')">
+          <span>🔧</span> <span lang="te">అడ్మిన్</span> / Admin
+        </button>
+      </div>
+
+      <!-- Personal Login -->
+      <form id="login-personal" class="login-form active" onsubmit="event.preventDefault(); app.loginPersonal();">
+        <label class="form-label" lang="te">పేరు / Name</label>
+        <input type="text" class="form-input" id="login-name" placeholder="మీ పేరు" required maxlength="60">
+
+        <label class="form-label" lang="te">ఫోన్ నంబర్ / Phone</label>
+        <input type="tel" class="form-input" id="login-phone" placeholder="10-digit mobile" pattern="[0-9]{10}" maxlength="10" required>
+
+        <label class="form-label" lang="te">గ్రామం / Village (optional)</label>
+        <input type="text" class="form-input" id="login-village" placeholder="Village / Town" maxlength="60">
+
+        <div id="login-personal-error" class="login-error"></div>
+        <button type="submit" class="btn-primary login-submit">
+          <span lang="te">లాగిన్</span> / Sign In
+        </button>
+      </form>
+
+      <!-- Admin Login -->
+      <form id="login-admin" class="login-form" onsubmit="event.preventDefault(); app.loginAdmin();">
+        <label class="form-label" lang="te">అడ్మిన్ PIN</label>
+        <input type="password" class="form-input" id="login-admin-pin" placeholder="Enter Admin PIN" maxlength="6" inputmode="numeric" required>
+        <div class="login-hint" lang="en">Default PIN: 1234 (change in admin panel)</div>
+        <div id="login-admin-error" class="login-error"></div>
+        <button type="submit" class="btn-primary login-submit">
+          🔐 <span lang="te">అడ్మిన్ లాగిన్</span>
+        </button>
+      </form>
+
+      <button class="login-guest" onclick="app.loginGuest()">
+        <span lang="te">అతిథిగా కొనసాగండి</span> · Continue as Guest
+      </button>
+    </div>
   </div>
 
   <!-- ===== TOAST CONTAINER ===== -->

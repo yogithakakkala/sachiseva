@@ -36,15 +36,89 @@
     setupServiceWorker();
     checkSchemeVersion();
     renderHomeQuickAccess();
+    applySessionUI();
   }
 
   async function initPinHash() {
-    // SHA-256 of '1234'
-    const encoder = new TextEncoder();
-    const data = encoder.encode('1234');
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    pinHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    // Stored admin PIN hash (defaults to SHA-256 of '1234')
+    const stored = localStorage.getItem('adminPinHash');
+    if (stored) { pinHash = stored; return; }
+    pinHash = await sha256('1234');
+  }
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // ========== SESSION / LOGIN ==========
+  function getSession() {
+    try { return JSON.parse(localStorage.getItem('sachiseva_session') || 'null'); }
+    catch (e) { return null; }
+  }
+  function setSession(s) { localStorage.setItem('sachiseva_session', JSON.stringify(s)); applySessionUI(); }
+  function clearSession() { localStorage.removeItem('sachiseva_session'); applySessionUI(); }
+
+  function applySessionUI() {
+    const session = getSession();
+    const loginScreen = document.getElementById('login-screen');
+    const adminBtn = document.getElementById('admin-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    if (!loginScreen) return;
+    if (!session) {
+      loginScreen.classList.add('active');
+      if (adminBtn) adminBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'none';
+    } else {
+      loginScreen.classList.remove('active');
+      if (adminBtn) adminBtn.style.display = session.role === 'admin' ? 'flex' : 'none';
+      if (logoutBtn) logoutBtn.style.display = session.role === 'guest' ? 'none' : 'flex';
+    }
+  }
+
+  function switchLoginTab(tab) {
+    document.querySelectorAll('.login-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    document.getElementById('login-personal').classList.toggle('active', tab === 'personal');
+    document.getElementById('login-admin').classList.toggle('active', tab === 'admin');
+  }
+
+  function loginPersonal() {
+    const name = (document.getElementById('login-name')?.value || '').trim();
+    const phone = (document.getElementById('login-phone')?.value || '').trim();
+    const village = (document.getElementById('login-village')?.value || '').trim();
+    const err = document.getElementById('login-personal-error');
+    err.textContent = '';
+    if (name.length < 2) { err.textContent = 'Please enter your name'; return; }
+    if (!/^[6-9]\d{9}$/.test(phone)) { err.textContent = 'Enter a valid 10-digit mobile number'; return; }
+    // Merge into citizen profile so eligibility uses it
+    let profile = getCitizenProfile() || {};
+    profile.name = name; profile.phone = phone;
+    if (village) profile.village = village;
+    try { localStorage.setItem('citizenProfile', JSON.stringify(profile)); } catch (e) {}
+    setSession({ role: 'personal', name, phone, loggedAt: Date.now() });
+    showToast('✅ స్వాగతం, ' + name, 'Welcome, ' + name);
+    renderProfileForm();
+  }
+
+  async function loginAdmin() {
+    const input = document.getElementById('login-admin-pin')?.value || '';
+    const err = document.getElementById('login-admin-error');
+    err.textContent = '';
+    const inputHash = await sha256(input);
+    if (inputHash !== pinHash) { err.textContent = 'Incorrect PIN'; return; }
+    setSession({ role: 'admin', loggedAt: Date.now() });
+    showToast('🔧 అడ్మిన్ లాగిన్ విజయవంతం', 'Admin signed in');
+    document.getElementById('login-admin-pin').value = '';
+  }
+
+  function loginGuest() {
+    setSession({ role: 'guest', loggedAt: Date.now() });
+  }
+
+  function logout() {
+    if (!confirm('Log out of SachiSeva?')) return;
+    clearSession();
+    closeAdminPanel();
   }
 
   // ========== DATA LOADING ==========
@@ -60,6 +134,14 @@
       showOfflineMessage();
       return;
     }
+    // Merge admin-added custom schemes (offline, local-only)
+    try {
+      const custom = JSON.parse(localStorage.getItem('customSchemes') || '[]');
+      if (Array.isArray(custom) && custom.length) {
+        const existingIds = new Set(schemesData.schemes.map(s => s.id));
+        custom.forEach(c => { if (!existingIds.has(c.id)) schemesData.schemes.push(c); });
+      }
+    } catch (e) { /* ignore */ }
     // Merge admin overrides
     mergeOverrides();
     injectValidity();
@@ -1712,7 +1794,13 @@
         ⚠️ <span lang="te">ఈ మార్పులు ఈ పరికరంపై మాత్రమే వర్తిస్తాయి</span><br>
         <span lang="en" style="font-size:10px;">⚠️ Changes apply to this device only</span>
       </div>
-      <h3 style="margin-bottom:12px;"><span lang="te">పథకం ఓవర్‌రైడ్‌లు</span></h3>
+
+      <div class="flex gap-8 mb-12" style="flex-wrap:wrap;">
+        <button class="btn-primary btn-sm" onclick="app.showAddScheme()">➕ <span lang="te">కొత్త పథకం</span> / Add Scheme</button>
+        <button class="btn-secondary btn-sm" onclick="app.showChangePin()">🔑 Change PIN</button>
+      </div>
+
+      <h3 style="margin-bottom:12px;"><span lang="te">పథకం ఓవర్‌రైడ్‌లు</span> / Schemes</h3>
       <div style="max-height:400px;overflow-y:auto;margin-bottom:16px;">${schemesHtml}</div>
       <button class="btn-secondary mb-8" onclick="app.resetAllOverrides()">
         <span lang="te">అన్నీ రీసెట్ చేయండి</span> / <span lang="en">Reset All</span>
@@ -1729,6 +1817,118 @@
       </div>
 
       <div id="admin-editor" class="mt-12" style="display:none;"></div>`;
+  }
+
+  function showAddScheme() {
+    const editor = $('#admin-editor');
+    if (!editor) return;
+    editor.style.display = 'block';
+    editor.innerHTML = `
+      <h4 style="margin-bottom:8px;">➕ Add New Scheme</h4>
+      <label class="form-label">Scheme ID (lowercase, no spaces)</label>
+      <input class="form-input mb-8" id="new-scheme-id" placeholder="myscheme">
+      <label class="form-label">Name (Telugu)</label>
+      <input class="form-input mb-8" id="new-scheme-name-te" placeholder="పథకం పేరు">
+      <label class="form-label">Name (English)</label>
+      <input class="form-input mb-8" id="new-scheme-name-en" placeholder="Scheme Name">
+      <label class="form-label">Category</label>
+      <select class="form-select mb-8" id="new-scheme-category">
+        <option value="pension">Pension</option>
+        <option value="housing">Housing</option>
+        <option value="education">Education</option>
+        <option value="agriculture">Agriculture</option>
+        <option value="health">Health</option>
+        <option value="welfare">Welfare</option>
+      </select>
+      <label class="form-label">Benefit Badge (e.g. ₹3,000/మాసం)</label>
+      <input class="form-input mb-8" id="new-scheme-badge" placeholder="₹X/month">
+      <label class="form-label">Short Description (English)</label>
+      <textarea class="form-input mb-8" id="new-scheme-desc" style="height:60px;"></textarea>
+      <label class="form-label">Eligibility (JSON)</label>
+      <textarea class="form-input mb-8" id="new-scheme-elig" style="height:100px;font-family:monospace;font-size:12px;">{
+  "age_min": 18,
+  "income_monthly_max": 10000
+}</textarea>
+      <div id="new-scheme-error" style="color:var(--danger);font-size:12px;margin:4px 0;"></div>
+      <div class="flex gap-8">
+        <button class="btn-secondary" onclick="document.getElementById('admin-editor').style.display='none'">Cancel</button>
+        <button class="btn-primary" onclick="app.saveNewScheme()">Save Scheme</button>
+      </div>`;
+  }
+
+  function saveNewScheme() {
+    const err = document.getElementById('new-scheme-error');
+    err.textContent = '';
+    const id = (document.getElementById('new-scheme-id').value || '').trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+    const nameTe = document.getElementById('new-scheme-name-te').value.trim();
+    const nameEn = document.getElementById('new-scheme-name-en').value.trim();
+    const category = document.getElementById('new-scheme-category').value;
+    const badgeText = document.getElementById('new-scheme-badge').value.trim();
+    const desc = document.getElementById('new-scheme-desc').value.trim();
+    let eligibility;
+    try { eligibility = JSON.parse(document.getElementById('new-scheme-elig').value); }
+    catch (e) { err.textContent = 'Invalid eligibility JSON'; return; }
+    if (!id || !nameTe || !nameEn) { err.textContent = 'ID and both names are required'; return; }
+    if (schemesData.schemes.some(s => s.id === id)) { err.textContent = 'A scheme with this ID already exists'; return; }
+
+    const newScheme = {
+      id, nameTe, nameEn, category, badgeText,
+      descriptionEn: desc, descriptionTe: desc,
+      eligibility,
+      documents: [],
+      validity: { startDate: new Date().toISOString().slice(0,10), endDate: null, isOngoing: true },
+      isCustom: true
+    };
+    // Store in custom schemes
+    const custom = getCustomSchemes();
+    custom.push(newScheme);
+    localStorage.setItem('customSchemes', JSON.stringify(custom));
+    schemesData.schemes.push(newScheme);
+
+    addChangeLog(id, 'ADDED', null, JSON.stringify(newScheme));
+    renderAdminPanel();
+    document.getElementById('admin-editor').style.display = 'none';
+    showToast('✅ కొత్త పథకం జోడించబడింది', 'New scheme added');
+  }
+
+  function getCustomSchemes() {
+    try { return JSON.parse(localStorage.getItem('customSchemes') || '[]'); }
+    catch (e) { return []; }
+  }
+
+  function showChangePin() {
+    const editor = $('#admin-editor');
+    if (!editor) return;
+    editor.style.display = 'block';
+    editor.innerHTML = `
+      <h4 style="margin-bottom:8px;">🔑 Change Admin PIN</h4>
+      <label class="form-label">Current PIN</label>
+      <input type="password" class="form-input mb-8" id="pin-current" maxlength="6">
+      <label class="form-label">New PIN (4-6 digits)</label>
+      <input type="password" class="form-input mb-8" id="pin-new" maxlength="6" inputmode="numeric">
+      <label class="form-label">Confirm New PIN</label>
+      <input type="password" class="form-input mb-8" id="pin-confirm" maxlength="6" inputmode="numeric">
+      <div id="pin-change-error" style="color:var(--danger);font-size:12px;margin:4px 0;"></div>
+      <div class="flex gap-8">
+        <button class="btn-secondary" onclick="document.getElementById('admin-editor').style.display='none'">Cancel</button>
+        <button class="btn-primary" onclick="app.saveNewPin()">Update PIN</button>
+      </div>`;
+  }
+
+  async function saveNewPin() {
+    const err = document.getElementById('pin-change-error');
+    err.textContent = '';
+    const cur = document.getElementById('pin-current').value;
+    const neu = document.getElementById('pin-new').value;
+    const conf = document.getElementById('pin-confirm').value;
+    if (await sha256(cur) !== pinHash) { err.textContent = 'Current PIN incorrect'; return; }
+    if (!/^\d{4,6}$/.test(neu)) { err.textContent = 'New PIN must be 4-6 digits'; return; }
+    if (neu !== conf) { err.textContent = 'PINs do not match'; return; }
+    pinHash = await sha256(neu);
+    localStorage.setItem('adminPinHash', pinHash);
+    addChangeLog('*', 'PIN_CHANGED', null, null);
+    document.getElementById('admin-editor').style.display = 'none';
+    showToast('✅ PIN నవీకరించబడింది', 'PIN updated');
   }
 
   function editSchemeOverride(schemeId) {
@@ -2083,7 +2283,19 @@
     resetAllOverrides,
     navigateToCategory,
     toggleTracked,
-    showToast
+    showToast,
+    // Login / session
+    switchLoginTab,
+    loginPersonal,
+    loginAdmin,
+    loginGuest,
+    logout,
+    openAdminPanel,
+    // Admin extras
+    showAddScheme,
+    saveNewScheme,
+    showChangePin,
+    saveNewPin
   };
 
   // ========== STARTUP ==========
