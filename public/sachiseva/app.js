@@ -134,6 +134,14 @@
       showOfflineMessage();
       return;
     }
+    // Merge admin-added custom schemes (offline, local-only)
+    try {
+      const custom = JSON.parse(localStorage.getItem('customSchemes') || '[]');
+      if (Array.isArray(custom) && custom.length) {
+        const existingIds = new Set(schemesData.schemes.map(s => s.id));
+        custom.forEach(c => { if (!existingIds.has(c.id)) schemesData.schemes.push(c); });
+      }
+    } catch (e) { /* ignore */ }
     // Merge admin overrides
     mergeOverrides();
     injectValidity();
