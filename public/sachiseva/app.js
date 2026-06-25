@@ -36,15 +36,89 @@
     setupServiceWorker();
     checkSchemeVersion();
     renderHomeQuickAccess();
+    applySessionUI();
   }
 
   async function initPinHash() {
-    // SHA-256 of '1234'
-    const encoder = new TextEncoder();
-    const data = encoder.encode('1234');
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    pinHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    // Stored admin PIN hash (defaults to SHA-256 of '1234')
+    const stored = localStorage.getItem('adminPinHash');
+    if (stored) { pinHash = stored; return; }
+    pinHash = await sha256('1234');
+  }
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // ========== SESSION / LOGIN ==========
+  function getSession() {
+    try { return JSON.parse(localStorage.getItem('sachiseva_session') || 'null'); }
+    catch (e) { return null; }
+  }
+  function setSession(s) { localStorage.setItem('sachiseva_session', JSON.stringify(s)); applySessionUI(); }
+  function clearSession() { localStorage.removeItem('sachiseva_session'); applySessionUI(); }
+
+  function applySessionUI() {
+    const session = getSession();
+    const loginScreen = document.getElementById('login-screen');
+    const adminBtn = document.getElementById('admin-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    if (!loginScreen) return;
+    if (!session) {
+      loginScreen.classList.add('active');
+      if (adminBtn) adminBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'none';
+    } else {
+      loginScreen.classList.remove('active');
+      if (adminBtn) adminBtn.style.display = session.role === 'admin' ? 'flex' : 'none';
+      if (logoutBtn) logoutBtn.style.display = session.role === 'guest' ? 'none' : 'flex';
+    }
+  }
+
+  function switchLoginTab(tab) {
+    document.querySelectorAll('.login-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    document.getElementById('login-personal').classList.toggle('active', tab === 'personal');
+    document.getElementById('login-admin').classList.toggle('active', tab === 'admin');
+  }
+
+  function loginPersonal() {
+    const name = (document.getElementById('login-name')?.value || '').trim();
+    const phone = (document.getElementById('login-phone')?.value || '').trim();
+    const village = (document.getElementById('login-village')?.value || '').trim();
+    const err = document.getElementById('login-personal-error');
+    err.textContent = '';
+    if (name.length < 2) { err.textContent = 'Please enter your name'; return; }
+    if (!/^[6-9]\d{9}$/.test(phone)) { err.textContent = 'Enter a valid 10-digit mobile number'; return; }
+    // Merge into citizen profile so eligibility uses it
+    let profile = getCitizenProfile() || {};
+    profile.name = name; profile.phone = phone;
+    if (village) profile.village = village;
+    try { localStorage.setItem('citizenProfile', JSON.stringify(profile)); } catch (e) {}
+    setSession({ role: 'personal', name, phone, loggedAt: Date.now() });
+    showToast('✅ స్వాగతం, ' + name, 'Welcome, ' + name);
+    renderProfileForm();
+  }
+
+  async function loginAdmin() {
+    const input = document.getElementById('login-admin-pin')?.value || '';
+    const err = document.getElementById('login-admin-error');
+    err.textContent = '';
+    const inputHash = await sha256(input);
+    if (inputHash !== pinHash) { err.textContent = 'Incorrect PIN'; return; }
+    setSession({ role: 'admin', loggedAt: Date.now() });
+    showToast('🔧 అడ్మిన్ లాగిన్ విజయవంతం', 'Admin signed in');
+    document.getElementById('login-admin-pin').value = '';
+  }
+
+  function loginGuest() {
+    setSession({ role: 'guest', loggedAt: Date.now() });
+  }
+
+  function logout() {
+    if (!confirm('Log out of SachiSeva?')) return;
+    clearSession();
+    closeAdminPanel();
   }
 
   // ========== DATA LOADING ==========
