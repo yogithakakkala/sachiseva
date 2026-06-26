@@ -67,13 +67,29 @@
     if (!loginScreen) return;
     if (!session) {
       loginScreen.classList.add('active');
+      hideLoginForm();
       if (adminBtn) adminBtn.style.display = 'none';
       if (logoutBtn) logoutBtn.style.display = 'none';
     } else {
       loginScreen.classList.remove('active');
       if (adminBtn) adminBtn.style.display = session.role === 'admin' ? 'flex' : 'none';
-      if (logoutBtn) logoutBtn.style.display = session.role === 'guest' ? 'none' : 'flex';
+      if (logoutBtn) logoutBtn.style.display = 'flex';
     }
+  }
+
+  function showLoginForm(tab) {
+    const intro = document.getElementById('landing-intro');
+    const form = document.getElementById('landing-form');
+    if (intro) intro.classList.add('hidden');
+    if (form) form.classList.add('active');
+    switchLoginTab(tab || 'personal');
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0,0); }
+  }
+  function hideLoginForm() {
+    const intro = document.getElementById('landing-intro');
+    const form = document.getElementById('landing-form');
+    if (intro) intro.classList.remove('hidden');
+    if (form) form.classList.remove('active');
   }
 
   function switchLoginTab(tab) {
@@ -90,7 +106,6 @@
     err.textContent = '';
     if (name.length < 2) { err.textContent = 'Please enter your name'; return; }
     if (!/^[6-9]\d{9}$/.test(phone)) { err.textContent = 'Enter a valid 10-digit mobile number'; return; }
-    // Merge into citizen profile so eligibility uses it
     let profile = getCitizenProfile() || {};
     profile.name = name; profile.phone = phone;
     if (village) profile.village = village;
@@ -111,15 +126,12 @@
     document.getElementById('login-admin-pin').value = '';
   }
 
-  function loginGuest() {
-    setSession({ role: 'guest', loggedAt: Date.now() });
-  }
-
   function logout() {
     if (!confirm('Log out of SachiSeva?')) return;
     clearSession();
     closeAdminPanel();
   }
+
 
   // ========== DATA LOADING ==========
   async function loadSchemes() {
@@ -2288,7 +2300,8 @@
     switchLoginTab,
     loginPersonal,
     loginAdmin,
-    loginGuest,
+    showLoginForm,
+    hideLoginForm,
     logout,
     openAdminPanel,
     // Admin extras

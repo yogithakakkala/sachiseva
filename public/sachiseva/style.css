@@ -1626,49 +1626,162 @@ h1, h2, h3 {
 .nav-item .nav-label-te { font-size: 9px; }
 .nav-item .nav-label-en { font-size: 8px; }
 
-/* ===== LOGIN SCREEN ===== */
+/* ===== LANDING + LOGIN SCREEN ===== */
 .login-screen {
   position: fixed; inset: 0;
-  background: linear-gradient(180deg, #0B4FAE 0%, #0A3D7E 100%);
+  background: #F4F7FB;
   z-index: 9999;
   display: none;
-  align-items: center; justify-content: center;
-  padding: 24px 18px; overflow-y: auto;
+  flex-direction: column;
+  overflow-y: auto;
 }
 .login-screen.active { display: flex; }
 
-.login-wrap {
-  width: 100%; max-width: 460px;
-  display: flex; flex-direction: column; align-items: stretch;
-  animation: loginIn 0.35s ease;
+/* Top bar */
+.landing-topbar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  background: #fff;
+  border-bottom: 1px solid #E5E9F0;
 }
-@keyframes loginIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: none; } }
+.landing-brand { display: flex; align-items: center; gap: 10px; color: #0A3D7E; }
+.landing-brand-icon { width: 28px; height: 28px; }
+.landing-brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.landing-brand-en { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 17px; color: #0A3D7E; }
+.landing-brand-te { font-family: 'Noto Sans Telugu', sans-serif; font-size: 12px; color: #5D6D7E; margin-top: 1px; }
 
-.login-brand-top {
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  color: #fff; margin: 24px 0 28px;
+.landing-login-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #0A3D7E; color: #fff; border: none;
+  padding: 9px 18px; border-radius: 10px;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: background 0.2s, transform 0.05s;
 }
-.login-brand-icon { width: 34px; height: 34px; color: #fff; }
-.login-brand-name {
-  font-family: 'Inter', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.3px;
+.landing-login-btn:hover { background: #093468; }
+.landing-login-btn:active { transform: scale(0.97); }
+.landing-login-te { font-family: 'Noto Sans Telugu', sans-serif; font-size: 12px; opacity: 0.9; }
+
+/* Intro / hero */
+.landing-intro { display: block; animation: loginIn 0.35s ease; }
+.landing-form-view { display: none; padding: 24px 16px 36px; animation: loginIn 0.3s ease; }
+.landing-intro.hidden { display: none; }
+.landing-form-view.active { display: block; }
+@keyframes loginIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: none; } }
+
+.landing-hero {
+  background: linear-gradient(160deg, #0B4FAE 0%, #0A3D7E 100%);
+  color: #fff;
+  padding: 28px 20px 32px;
+}
+.landing-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #EAF1FA;
+  padding: 6px 12px; border-radius: 999px;
+  font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 600; letter-spacing: 0.6px;
+}
+.landing-pill [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; font-size: 11px; letter-spacing: 0; }
+
+.landing-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 40px; font-weight: 800; line-height: 1.05;
+  margin: 14px 0 4px; color: #fff;
+  display: flex; flex-direction: column;
+}
+.landing-title-te { font-family: 'Noto Sans Telugu', sans-serif; font-size: 26px; font-weight: 700; color: #EAF1FA; margin-top: 4px; }
+
+.landing-tagline {
+  font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
+  color: #EAF1FA; margin: 10px 0 14px; line-height: 1.4;
+}
+.landing-tagline [lang="te"] { display: block; font-family: 'Noto Sans Telugu', sans-serif; font-weight: 500; font-size: 14px; color: #C9D9EE; margin-top: 4px; }
+
+.landing-desc {
+  font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.55;
+  color: #D8E3F2; margin: 0 0 10px;
+}
+.landing-desc-te {
+  font-family: 'Noto Sans Telugu', sans-serif; font-size: 13.5px; line-height: 1.6;
+  color: #C9D9EE; margin: 0 0 20px;
 }
 
+.landing-cta-row { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+.landing-cta-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+  background: #fff; color: #0A3D7E; border: none;
+  padding: 14px 18px; border-radius: 12px;
+  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: transform 0.05s, box-shadow 0.2s;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+.landing-cta-primary [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; font-size: 13.5px; color: #1A5276; font-weight: 600; }
+.landing-cta-primary .landing-arrow { font-weight: 800; }
+.landing-cta-primary:active { transform: scale(0.98); }
+
+.landing-cta-secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: transparent; color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.55);
+  padding: 13px 18px; border-radius: 12px;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer;
+}
+.landing-cta-secondary [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; font-size: 13px; }
+
+/* About section */
+.landing-about { padding: 26px 20px 36px; background: #F4F7FB; }
+.landing-about-title {
+  font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 800;
+  color: #0A3D7E; margin: 0 0 14px;
+  display: flex; flex-direction: column;
+}
+.landing-about-title [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; font-size: 15px; color: #1A5276; font-weight: 700; margin-top: 2px; }
+
+.landing-feature-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.landing-feature-list li {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: #fff; border: 1px solid #E5E9F0; border-radius: 12px;
+  padding: 12px 14px;
+}
+.landing-feature-list li > div { display: flex; flex-direction: column; line-height: 1.35; }
+.landing-feature-list strong { font-family: 'Inter', sans-serif; font-size: 14px; color: #1A1A2E; font-weight: 700; }
+.landing-feature-list [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; font-size: 12.5px; color: #5D6D7E; margin-top: 2px; }
+.landing-check {
+  flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+  background: #D5F5E3; color: #1E8449;
+  display: grid; place-items: center; font-weight: 800; font-size: 13px;
+}
+
+/* Form card */
+.login-wrap { width: 100%; max-width: 460px; margin: 0 auto; }
 .login-card {
   background: #fff; width: 100%;
-  border-radius: 18px; padding: 18px 22px 26px;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+  border-radius: 16px; padding: 18px 20px 24px;
+  box-shadow: 0 12px 36px rgba(10,61,126,0.12);
+  border: 1px solid #E5E9F0;
 }
+.login-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; border: none; cursor: pointer;
+  color: #0A3D7E; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  padding: 4px 0 10px;
+}
+.login-back [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; font-size: 12px; color: #5D6D7E; }
 
 .login-tabs {
   display: flex; gap: 6px; margin: 0 0 18px;
   background: #EAF1FA; border-radius: 12px; padding: 5px;
 }
 .login-tab {
-  flex: 1; padding: 12px 8px; border: none; background: transparent;
+  flex: 1; padding: 10px 8px; border: none; background: transparent;
   border-radius: 9px; cursor: pointer;
-  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+  font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600;
   color: #2D4A6E; transition: all 0.2s;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap;
 }
+.login-tab [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; font-size: 12px; }
 .login-tab.active {
   background: #fff; color: #0A3D7E;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
@@ -1679,14 +1792,16 @@ h1, h2, h3 {
 
 .login-heading {
   font-family: 'Inter', sans-serif;
-  font-size: 24px; font-weight: 800; color: #111827;
+  font-size: 20px; font-weight: 800; color: #111827;
   margin: 4px 0 6px;
 }
+.login-heading-te { font-family: 'Noto Sans Telugu', sans-serif; font-size: 15px; color: #1A5276; font-weight: 700; margin-left: 6px; }
 .login-desc {
   font-family: 'Inter', sans-serif;
-  font-size: 14px; color: #6B7280; line-height: 1.5;
-  margin: 0 0 18px;
+  font-size: 13px; color: #6B7280; line-height: 1.5;
+  margin: 0 0 14px;
 }
+.login-desc [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; display: block; margin-top: 2px; }
 
 .login-form .form-label {
   display: block;
@@ -1695,6 +1810,7 @@ h1, h2, h3 {
   color: #6B7280; text-transform: uppercase;
   margin: 14px 0 6px;
 }
+.login-form .form-label [lang="te"] { font-family: 'Noto Sans Telugu', sans-serif; text-transform: none; letter-spacing: 0; font-size: 11.5px; color: #1A5276; margin-left: 4px; }
 .login-form .form-label .label-optional {
   font-weight: 500; letter-spacing: 0.3px; text-transform: none; color: #9CA3AF;
 }
@@ -1714,22 +1830,19 @@ h1, h2, h3 {
 
 .login-submit {
   width: 100%; margin-top: 18px;
-  height: 50px; border: none; border-radius: 10px;
+  min-height: 50px; padding: 8px 14px;
+  border: none; border-radius: 10px;
   background: #0A3D7E; color: #fff;
-  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600;
+  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
   cursor: pointer; transition: background 0.2s, transform 0.05s;
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
 }
+.login-submit-te { font-family: 'Noto Sans Telugu', sans-serif; font-size: 12.5px; font-weight: 500; opacity: 0.9; }
 .login-submit:hover { background: #093468; }
 .login-submit:active { transform: scale(0.99); }
 
 .login-error { color: var(--danger); font-size: 12px; min-height: 16px; margin-top: 8px; }
 .login-hint { font-family: 'Inter', sans-serif; font-size: 12px; color: #9CA3AF; margin-top: 6px; }
 
-.login-foot {
-  text-align: center; margin-top: 14px;
-  font-family: 'Inter', sans-serif; font-size: 13px; color: #6B7280;
-}
-.login-foot a { color: #0B4FAE; font-weight: 600; text-decoration: none; }
-.login-foot a:hover { text-decoration: underline; }
-
 #admin-btn, #logout-btn { font-size: 18px; }
+

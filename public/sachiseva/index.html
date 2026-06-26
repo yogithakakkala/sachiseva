@@ -281,11 +281,13 @@
     <div id="admin-panel-body"></div>
   </div>
 
-  <!-- ===== LOGIN SCREEN ===== -->
-  <div id="login-screen" class="login-screen" role="dialog" aria-modal="true" aria-label="Login">
-    <div class="login-wrap">
-      <div class="login-brand-top">
-        <svg class="login-brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <!-- ===== LOGIN / LANDING SCREEN ===== -->
+  <div id="login-screen" class="login-screen" role="dialog" aria-modal="true" aria-label="Welcome to SachiSeva">
+
+    <!-- Top white bar: brand left, Login corner right -->
+    <header class="landing-topbar">
+      <div class="landing-brand">
+        <svg class="landing-brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="3" y1="22" x2="21" y2="22"/>
           <line x1="3" y1="10" x2="21" y2="10"/>
           <polygon points="12 2 20 7 4 7 12 2"/>
@@ -294,47 +296,143 @@
           <line x1="14" y1="10" x2="14" y2="22"/>
           <line x1="18" y1="10" x2="18" y2="22"/>
         </svg>
-        <span class="login-brand-name">SachiSeva</span>
-      </div>
-
-      <div class="login-card">
-        <div class="login-tabs" role="tablist">
-          <button class="login-tab active" data-tab="personal" onclick="app.switchLoginTab('personal')">Citizen Login</button>
-          <button class="login-tab" data-tab="admin" onclick="app.switchLoginTab('admin')">Admin Login</button>
+        <div class="landing-brand-text">
+          <span class="landing-brand-en">SachiSeva</span>
+          <span class="landing-brand-te" lang="te">సాచిసేవ</span>
         </div>
+      </div>
+      <button type="button" class="landing-login-btn" onclick="app.showLoginForm('personal')">
+        <span>Login</span>
+        <span class="landing-login-te" lang="te">లాగిన్</span>
+      </button>
+    </header>
 
-        <!-- Personal Login -->
-        <form id="login-personal" class="login-form active" onsubmit="event.preventDefault(); app.loginPersonal();">
-          <h2 class="login-heading">Sign in</h2>
-          <p class="login-desc">For village citizens to check welfare scheme eligibility.</p>
+    <!-- Intro view (hero + about) -->
+    <div id="landing-intro" class="landing-intro">
+      <section class="landing-hero">
+        <div class="landing-pill">
+          <span>GOVERNMENT OF ANDHRA PRADESH</span>
+          <span lang="te">· సచివాలయ సేవలు</span>
+        </div>
+        <h1 class="landing-title">
+          SachiSeva
+          <span class="landing-title-te" lang="te">సాచిసేవ</span>
+        </h1>
+        <p class="landing-tagline">
+          AP Welfare Schemes &amp; Sachivalayam Services — in your pocket.
+          <span lang="te">ఏపీ సంక్షేమ పథకాలు &amp; సచివాలయ సేవలు మీ చేతిలో.</span>
+        </p>
+        <p class="landing-desc">
+          Check your eligibility for 21 government welfare schemes — NTR Bharosa, Talliki Vandanam, Annadata Sukhibhava, Deepam 2.0 and more — and get document checklists for 9 certificate services. Works offline, in Telugu and English.
+        </p>
+        <p class="landing-desc-te" lang="te">
+          21 ప్రభుత్వ సంక్షేమ పథకాలకు మీ అర్హతను తనిఖీ చేయండి — ఎన్‌టీఆర్ భరోసా, తల్లికి వందనం, అన్నదాత సుఖీభవ, దీపం 2.0 మరియు మరిన్ని — మరియు 9 ధృవీకరణ సేవలకు పత్రాల జాబితాను పొందండి. ఆఫ్‌లైన్‌లో, తెలుగు మరియు ఇంగ్లీష్‌లో పనిచేస్తుంది.
+        </p>
 
-          <label class="form-label" for="login-name">NAME</label>
-          <input type="text" class="form-input" id="login-name" placeholder="Your full name" required maxlength="60" autocomplete="name">
+        <div class="landing-cta-row">
+          <button type="button" class="landing-cta-primary" onclick="app.showLoginForm('personal')">
+            <span>Create New Account</span>
+            <span lang="te">కొత్త ఖాతా సృష్టించండి</span>
+            <span aria-hidden="true" class="landing-arrow">→</span>
+          </button>
+          <button type="button" class="landing-cta-secondary" onclick="app.showLoginForm('personal')">
+            <span>Sign In</span>
+            <span lang="te">సైన్ ఇన్</span>
+          </button>
+        </div>
+      </section>
 
-          <label class="form-label" for="login-phone">PHONE</label>
-          <input type="tel" class="form-input" id="login-phone" placeholder="10-digit mobile" pattern="[6-9][0-9]{9}" maxlength="10" required autocomplete="tel">
+      <section class="landing-about">
+        <h2 class="landing-about-title">
+          What this app does
+          <span lang="te">ఈ యాప్ ఏం చేస్తుంది</span>
+        </h2>
+        <ul class="landing-feature-list">
+          <li>
+            <span class="landing-check">✓</span>
+            <div>
+              <strong>Find schemes you qualify for</strong>
+              <span lang="te">మీకు అర్హత ఉన్న పథకాలను కనుగొనండి</span>
+            </div>
+          </li>
+          <li>
+            <span class="landing-check">✓</span>
+            <div>
+              <strong>Document checklists for certificates</strong>
+              <span lang="te">ధృవీకరణ పత్రాల పత్రాల జాబితాలు</span>
+            </div>
+          </li>
+          <li>
+            <span class="landing-check">✓</span>
+            <div>
+              <strong>Track scheme validity &amp; deadlines</strong>
+              <span lang="te">పథకాల గడువు &amp; కాలపరిమితిని ట్రాక్ చేయండి</span>
+            </div>
+          </li>
+          <li>
+            <span class="landing-check">✓</span>
+            <div>
+              <strong>Works offline, Telugu &amp; English</strong>
+              <span lang="te">ఆఫ్‌లైన్‌లో, తెలుగు &amp; ఇంగ్లీష్‌లో</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
 
-          <label class="form-label" for="login-village">VILLAGE <span class="label-optional">(optional)</span></label>
-          <input type="text" class="form-input" id="login-village" placeholder="Village / Town" maxlength="60">
+    <!-- Form view -->
+    <div id="landing-form" class="landing-form-view">
+      <div class="login-wrap">
+        <div class="login-card">
+          <button type="button" class="login-back" onclick="app.hideLoginForm()" aria-label="Back">
+            ← <span>Back</span> <span lang="te">వెనుకకు</span>
+          </button>
 
-          <div id="login-personal-error" class="login-error"></div>
-          <button type="submit" class="login-submit">Sign in</button>
-          <div class="login-foot">New here? <a href="#" onclick="event.preventDefault(); app.loginGuest();">Continue as guest</a></div>
-        </form>
+          <div class="login-tabs" role="tablist">
+            <button class="login-tab active" data-tab="personal" onclick="app.switchLoginTab('personal')">
+              Citizen <span lang="te">పౌరుడు</span>
+            </button>
+            <button class="login-tab" data-tab="admin" onclick="app.switchLoginTab('admin')">
+              Admin <span lang="te">అడ్మిన్</span>
+            </button>
+          </div>
 
-        <!-- Admin Login -->
-        <form id="login-admin" class="login-form" onsubmit="event.preventDefault(); app.loginAdmin();">
-          <h2 class="login-heading">Sign in</h2>
-          <p class="login-desc">Admin access is granted by the secretariat. Enter your admin PIN.</p>
+          <!-- Personal Login / Create Account -->
+          <form id="login-personal" class="login-form active" onsubmit="event.preventDefault(); app.loginPersonal();">
+            <h2 class="login-heading">Create your account <span lang="te" class="login-heading-te">ఖాతా సృష్టించండి</span></h2>
+            <p class="login-desc">For village citizens to check welfare scheme eligibility. <span lang="te">పౌరులు సంక్షేమ పథకాల అర్హతను తనిఖీ చేయడానికి.</span></p>
 
-          <label class="form-label" for="login-admin-pin">ADMIN PIN</label>
-          <input type="password" class="form-input" id="login-admin-pin" placeholder="••••" maxlength="6" inputmode="numeric" required autocomplete="current-password">
-          <div class="login-hint">Default PIN: 1234 — change it from the admin panel.</div>
+            <label class="form-label" for="login-name">NAME <span lang="te">పేరు</span></label>
+            <input type="text" class="form-input" id="login-name" placeholder="Your full name / మీ పూర్తి పేరు" required maxlength="60" autocomplete="name">
 
-          <div id="login-admin-error" class="login-error"></div>
-          <button type="submit" class="login-submit">Sign in</button>
-          <div class="login-foot">Not an admin? <a href="#" onclick="event.preventDefault(); app.switchLoginTab('personal')">Citizen sign in</a></div>
-        </form>
+            <label class="form-label" for="login-phone">PHONE <span lang="te">ఫోన్</span></label>
+            <input type="tel" class="form-input" id="login-phone" placeholder="10-digit mobile / 10 అంకెల మొబైల్" pattern="[6-9][0-9]{9}" maxlength="10" required autocomplete="tel">
+
+            <label class="form-label" for="login-village">VILLAGE <span lang="te">గ్రామం</span> <span class="label-optional">(optional)</span></label>
+            <input type="text" class="form-input" id="login-village" placeholder="Village / Town · గ్రామం / పట్టణం" maxlength="60">
+
+            <div id="login-personal-error" class="login-error"></div>
+            <button type="submit" class="login-submit">
+              Create Account &amp; Continue
+              <span lang="te" class="login-submit-te">ఖాతా సృష్టించి కొనసాగండి</span>
+            </button>
+          </form>
+
+          <!-- Admin Login -->
+          <form id="login-admin" class="login-form" onsubmit="event.preventDefault(); app.loginAdmin();">
+            <h2 class="login-heading">Admin sign in <span lang="te" class="login-heading-te">అడ్మిన్ సైన్ ఇన్</span></h2>
+            <p class="login-desc">Admin access is granted by the secretariat. <span lang="te">అడ్మిన్ యాక్సెస్ సచివాలయం ద్వారా మంజూరు చేయబడుతుంది.</span></p>
+
+            <label class="form-label" for="login-admin-pin">ADMIN PIN <span lang="te">అడ్మిన్ పిన్</span></label>
+            <input type="password" class="form-input" id="login-admin-pin" placeholder="••••" maxlength="6" inputmode="numeric" required autocomplete="current-password">
+            <div class="login-hint">Default PIN: 1234 — change it from the admin panel.</div>
+
+            <div id="login-admin-error" class="login-error"></div>
+            <button type="submit" class="login-submit">
+              Sign in <span lang="te" class="login-submit-te">సైన్ ఇన్</span>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
