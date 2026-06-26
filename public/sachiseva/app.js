@@ -2300,7 +2300,8 @@
     switchLoginTab,
     loginPersonal,
     loginAdmin,
-    loginGuest,
+    showLoginForm,
+    hideLoginForm,
     logout,
     openAdminPanel,
     // Admin extras
