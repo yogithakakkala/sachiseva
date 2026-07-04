@@ -14,16 +14,245 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      application_messages: {
+        Row: {
+          application_id: string
+          attachment_name: string | null
+          attachment_url: string | null
+          body: string | null
+          created_at: string
+          id: string
+          sender_id: string
+        }
+        Insert: {
+          application_id: string
+          attachment_name?: string | null
+          attachment_url?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          sender_id: string
+        }
+        Update: {
+          application_id?: string
+          attachment_name?: string | null
+          attachment_url?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_messages_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      applications: {
+        Row: {
+          applicant_name: string | null
+          applicant_phone: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          scheme_id: string
+          status: Database["public"]["Enums"]["application_status"]
+          submitted_documents: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheme_id: string
+          status?: Database["public"]["Enums"]["application_status"]
+          submitted_documents?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheme_id?: string
+          status?: Database["public"]["Enums"]["application_status"]
+          submitted_documents?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_scheme_id_fkey"
+            columns: ["scheme_id"]
+            isOneToOne: false
+            referencedRelation: "schemes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_offices: {
+        Row: {
+          document_type: string
+          id: string
+          issuing_office_type: string
+          notes: string | null
+        }
+        Insert: {
+          document_type: string
+          id?: string
+          issuing_office_type: string
+          notes?: string | null
+        }
+        Update: {
+          document_type?: string
+          id?: string
+          issuing_office_type?: string
+          notes?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          uploaded_document_types: string[]
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+          uploaded_document_types?: string[]
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          uploaded_document_types?: string[]
+        }
+        Relationships: []
+      }
+      sachivalayam_centers: {
+        Row: {
+          address: string
+          created_at: string
+          district: string
+          id: string
+          latitude: number
+          longitude: number
+          mandal: string
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          address: string
+          created_at?: string
+          district: string
+          id?: string
+          latitude: number
+          longitude: number
+          mandal: string
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          district?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          mandal?: string
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      schemes: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string
+          eligibility: string
+          id: string
+          name: string
+          name_te: string | null
+          required_documents: string[]
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description: string
+          eligibility: string
+          id?: string
+          name: string
+          name_te?: string | null
+          required_documents?: string[]
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string
+          eligibility?: string
+          id?: string
+          name?: string
+          name_te?: string | null
+          required_documents?: string[]
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      application_status: "submitted" | "under_review" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +379,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      application_status: ["submitted", "under_review", "approved", "rejected"],
+    },
   },
 } as const
