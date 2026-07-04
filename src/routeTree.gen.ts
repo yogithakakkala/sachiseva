@@ -9,38 +9,206 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as CentersRouteImport } from './routes/centers'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SchemesIndexRouteImport } from './routes/schemes.index'
+import { Route as SchemesIdRouteImport } from './routes/schemes.$id'
+import { Route as AuthenticatedMyApplicationsIndexRouteImport } from './routes/_authenticated/my-applications.index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedMyApplicationsIdRouteImport } from './routes/_authenticated/my-applications.$id'
+import { Route as AuthenticatedApplySchemeIdRouteImport } from './routes/_authenticated/apply.$schemeId'
+import { Route as AuthenticatedAdminIdRouteImport } from './routes/_authenticated/admin.$id'
 
+const CentersRoute = CentersRouteImport.update({
+  id: '/centers',
+  path: '/centers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SchemesIndexRoute = SchemesIndexRouteImport.update({
+  id: '/schemes/',
+  path: '/schemes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchemesIdRoute = SchemesIdRouteImport.update({
+  id: '/schemes/$id',
+  path: '/schemes/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMyApplicationsIndexRoute =
+  AuthenticatedMyApplicationsIndexRouteImport.update({
+    id: '/my-applications/',
+    path: '/my-applications/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMyApplicationsIdRoute =
+  AuthenticatedMyApplicationsIdRouteImport.update({
+    id: '/my-applications/$id',
+    path: '/my-applications/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedApplySchemeIdRoute =
+  AuthenticatedApplySchemeIdRouteImport.update({
+    id: '/apply/$schemeId',
+    path: '/apply/$schemeId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminIdRoute = AuthenticatedAdminIdRouteImport.update({
+  id: '/admin/$id',
+  path: '/admin/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/centers': typeof CentersRoute
+  '/schemes/$id': typeof SchemesIdRoute
+  '/schemes/': typeof SchemesIndexRoute
+  '/admin/$id': typeof AuthenticatedAdminIdRoute
+  '/apply/$schemeId': typeof AuthenticatedApplySchemeIdRoute
+  '/my-applications/$id': typeof AuthenticatedMyApplicationsIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/my-applications/': typeof AuthenticatedMyApplicationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/centers': typeof CentersRoute
+  '/schemes/$id': typeof SchemesIdRoute
+  '/schemes': typeof SchemesIndexRoute
+  '/admin/$id': typeof AuthenticatedAdminIdRoute
+  '/apply/$schemeId': typeof AuthenticatedApplySchemeIdRoute
+  '/my-applications/$id': typeof AuthenticatedMyApplicationsIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/my-applications': typeof AuthenticatedMyApplicationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/centers': typeof CentersRoute
+  '/schemes/$id': typeof SchemesIdRoute
+  '/schemes/': typeof SchemesIndexRoute
+  '/_authenticated/admin/$id': typeof AuthenticatedAdminIdRoute
+  '/_authenticated/apply/$schemeId': typeof AuthenticatedApplySchemeIdRoute
+  '/_authenticated/my-applications/$id': typeof AuthenticatedMyApplicationsIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/my-applications/': typeof AuthenticatedMyApplicationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/centers'
+    | '/schemes/$id'
+    | '/schemes/'
+    | '/admin/$id'
+    | '/apply/$schemeId'
+    | '/my-applications/$id'
+    | '/admin/'
+    | '/my-applications/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/centers'
+    | '/schemes/$id'
+    | '/schemes'
+    | '/admin/$id'
+    | '/apply/$schemeId'
+    | '/my-applications/$id'
+    | '/admin'
+    | '/my-applications'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/about'
+    | '/auth'
+    | '/centers'
+    | '/schemes/$id'
+    | '/schemes/'
+    | '/_authenticated/admin/$id'
+    | '/_authenticated/apply/$schemeId'
+    | '/_authenticated/my-applications/$id'
+    | '/_authenticated/admin/'
+    | '/_authenticated/my-applications/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
+  CentersRoute: typeof CentersRoute
+  SchemesIdRoute: typeof SchemesIdRoute
+  SchemesIndexRoute: typeof SchemesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/centers': {
+      id: '/centers'
+      path: '/centers'
+      fullPath: '/centers'
+      preLoaderRoute: typeof CentersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +216,86 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/schemes/': {
+      id: '/schemes/'
+      path: '/schemes'
+      fullPath: '/schemes/'
+      preLoaderRoute: typeof SchemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schemes/$id': {
+      id: '/schemes/$id'
+      path: '/schemes/$id'
+      fullPath: '/schemes/$id'
+      preLoaderRoute: typeof SchemesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/my-applications/': {
+      id: '/_authenticated/my-applications/'
+      path: '/my-applications'
+      fullPath: '/my-applications/'
+      preLoaderRoute: typeof AuthenticatedMyApplicationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/my-applications/$id': {
+      id: '/_authenticated/my-applications/$id'
+      path: '/my-applications/$id'
+      fullPath: '/my-applications/$id'
+      preLoaderRoute: typeof AuthenticatedMyApplicationsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/apply/$schemeId': {
+      id: '/_authenticated/apply/$schemeId'
+      path: '/apply/$schemeId'
+      fullPath: '/apply/$schemeId'
+      preLoaderRoute: typeof AuthenticatedApplySchemeIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/$id': {
+      id: '/_authenticated/admin/$id'
+      path: '/admin/$id'
+      fullPath: '/admin/$id'
+      preLoaderRoute: typeof AuthenticatedAdminIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminIdRoute: typeof AuthenticatedAdminIdRoute
+  AuthenticatedApplySchemeIdRoute: typeof AuthenticatedApplySchemeIdRoute
+  AuthenticatedMyApplicationsIdRoute: typeof AuthenticatedMyApplicationsIdRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedMyApplicationsIndexRoute: typeof AuthenticatedMyApplicationsIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminIdRoute: AuthenticatedAdminIdRoute,
+  AuthenticatedApplySchemeIdRoute: AuthenticatedApplySchemeIdRoute,
+  AuthenticatedMyApplicationsIdRoute: AuthenticatedMyApplicationsIdRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedMyApplicationsIndexRoute: AuthenticatedMyApplicationsIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
+  CentersRoute: CentersRoute,
+  SchemesIdRoute: SchemesIdRoute,
+  SchemesIndexRoute: SchemesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
