@@ -28,17 +28,16 @@ function AdminDetail() {
       const { data: msgs } = await supabase.from("application_messages").select("*").eq("application_id", id).order("created_at");
       setMessages(msgs ?? []);
       // Sign URLs for uploaded docs
-      if (data?.submitted_documents) {
-        const urls: Record<number, string> = {};
-        for (let i = 0; i < data.submitted_documents.length; i++) {
-          const d = data.submitted_documents[i];
-          if (d.path) {
-            const { data: s } = await supabase.storage.from("documents").createSignedUrl(d.path, 60 * 60);
-            if (s?.signedUrl) urls[i] = s.signedUrl;
-          }
+      const docs = (data?.submitted_documents ?? []) as Array<{ type: string; path: string; name: string }>;
+      const urls: Record<number, string> = {};
+      for (let i = 0; i < docs.length; i++) {
+        const d = docs[i];
+        if (d.path) {
+          const { data: s } = await supabase.storage.from("documents").createSignedUrl(d.path, 60 * 60);
+          if (s?.signedUrl) urls[i] = s.signedUrl;
         }
-        setSignedDocs(urls);
       }
+      setSignedDocs(urls);
     }
     void load();
     const ch = supabase.channel(`admin-app-${id}`)
