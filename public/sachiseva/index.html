@@ -16,6 +16,7 @@
   <link rel="apple-touch-icon" href="./icon-192.svg">
 
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <link rel="stylesheet" href="./style.css">
 
   <style>
@@ -65,6 +66,11 @@
       <span class="nav-icon">⏱️</span>
       <span class="nav-label-te" lang="te">ట్రాకర్</span>
       <span class="nav-label-en" lang="en">Tracker</span>
+    </button>
+    <button class="nav-item" data-screen="nearest" aria-label="Nearest Center — సమీప కేంద్రం">
+      <span class="nav-icon">📍</span>
+      <span class="nav-label-te" lang="te">సమీపం</span>
+      <span class="nav-label-en" lang="en">Nearest</span>
     </button>
     <button class="nav-item" data-screen="help" aria-label="Help — సహాయం">
       <span class="nav-icon">❓</span>
@@ -196,6 +202,20 @@
     </div>
     <div id="services-list"></div>
   </main>
+
+  <!-- ===== SCREEN: NEAREST CENTER ===== -->
+  <main id="screen-nearest" class="screen" aria-label="Nearest Sachivalayam Center">
+    <div class="section-header">
+      <span lang="te">సమీప సచివాలయ కేంద్రం</span>
+    </div>
+    <div class="section-subtitle">
+      <span lang="en">Nearest Sachivalayam Center · Find centers near you</span>
+    </div>
+    <div id="nearest-status" class="nearest-status"></div>
+    <div id="nearest-map" class="nearest-map" role="region" aria-label="Map of centers"></div>
+    <div id="nearest-list" class="nearest-list"></div>
+  </main>
+
 
   <!-- ===== SCREEN 5: TRACKER ===== -->
   <main id="screen-tracker" class="screen" aria-label="Tracker screen">
@@ -441,7 +461,8 @@
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <!-- ===== SCRIPTS ===== -->
-  <script src="./app.js"></script>
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+ <script src="./app.js"></script>
 
 </body>
 </html>
