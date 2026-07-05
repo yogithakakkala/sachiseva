@@ -2267,6 +2267,175 @@
       </div>`;
   }
 
+  // ========== NEAREST SACHIVALAYAM CENTER ==========
+  const SUPABASE_URL_NEAREST = 'https://ihfdwtzrpbjlfcmwmpkx.supabase.co';
+  const SUPABASE_KEY_NEAREST = 'sb_publishable_7i_O9sXiDh3SOF51TGTnPQ_yV6Nj1o6';
+  let nearestState = { map: null, markers: [], userMarker: null, centers: [], userCoords: null, loaded: false };
+
+  // Haversine distance in km
+  function haversineKm(lat1, lon1, lat2, lon2) {
+    const toRad = d => d * Math.PI / 180;
+    const R = 6371;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLon / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(a));
+  }
+
+  async function fetchCenters() {
+    try {
+      const res = await fetch(`${SUPABASE_URL_NEAREST}/rest/v1/sachivalayam_centers?select=*`, {
+        headers: { apikey: SUPABASE_KEY_NEAREST, Authorization: `Bearer ${SUPABASE_KEY_NEAREST}` }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    } catch (e) {
+      console.warn('Failed to load centers', e);
+      return [];
+    }
+  }
+
+  function setNearestStatus(msg, kind) {
+    const el = document.getElementById('nearest-status');
+    if (!el) return;
+    el.textContent = msg || '';
+    el.className = 'nearest-status' + (kind ? ' ns-' + kind : '');
+    el.style.display = msg ? 'block' : 'none';
+  }
+
+  async function renderNearestScreen() {
+    const mapEl = document.getElementById('nearest-map');
+    const listEl = document.getElementById('nearest-list');
+    if (!mapEl || !listEl) return;
+
+    if (typeof L === 'undefined') {
+      setNearestStatus('Map library failed to load. Check your connection.', 'err');
+      listEl.innerHTML = '';
+      return;
+    }
+
+    if (!nearestState.loaded) {
+      setNearestStatus('Loading centers…', 'info');
+      nearestState.centers = await fetchCenters();
+      nearestState.loaded = true;
+    }
+
+    const centers = nearestState.centers;
+    if (!centers.length) {
+      setNearestStatus('No centers available yet. Please check back later.', 'warn');
+      listEl.innerHTML = '';
+      // still init an empty map centered on AP
+      if (!nearestState.map) {
+        nearestState.map = L.map(mapEl).setView([15.9129, 79.7400], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(nearestState.map);
+      }
+      setTimeout(() => nearestState.map && nearestState.map.invalidateSize(), 100);
+      return;
+    }
+
+    // Init map once
+    if (!nearestState.map) {
+      nearestState.map = L.map(mapEl).setView([centers[0].latitude, centers[0].longitude], 8);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(nearestState.map);
+    }
+    setTimeout(() => nearestState.map && nearestState.map.invalidateSize(), 100);
+
+    // Clear old markers
+    nearestState.markers.forEach(m => nearestState.map.removeLayer(m));
+    nearestState.markers = [];
+
+    centers.forEach(c => {
+      if (typeof c.latitude !== 'number' || typeof c.longitude !== 'number') return;
+      const m = L.marker([c.latitude, c.longitude]).addTo(nearestState.map)
+        .bindPopup(
+          `<strong>${escapeHtml(c.name || '')}</strong><br>` +
+          `${escapeHtml(c.address || '')}<br>` +
+          `${escapeHtml([c.mandal, c.district].filter(Boolean).join(', '))}<br>` +
+          (c.phone ? `📞 <a href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a>` : '')
+        );
+      nearestState.markers.push(m);
+    });
+
+    // Try geolocation
+    if (nearestState.userCoords) {
+      finalizeNearest(centers, nearestState.userCoords);
+    } else if (!navigator.geolocation) {
+      setNearestStatus('Location not supported on this device. Showing all centers.', 'warn');
+      renderNearestList(centers, null);
+    } else {
+      setNearestStatus('Detecting your location…', 'info');
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          nearestState.userCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          finalizeNearest(centers, nearestState.userCoords);
+        },
+        err => {
+          console.warn('Geolocation error', err);
+          setNearestStatus('Location unavailable. Showing all centers.', 'warn');
+          renderNearestList(centers, null);
+        },
+        { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+      );
+    }
+  }
+
+  function finalizeNearest(centers, coords) {
+    setNearestStatus('', '');
+    if (nearestState.userMarker) nearestState.map.removeLayer(nearestState.userMarker);
+    const youIcon = L.divIcon({
+      className: 'you-marker',
+      html: '<div style="background:#0A3D62;color:#fff;padding:4px 8px;border-radius:12px;font-size:11px;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.3);">You</div>',
+      iconSize: [40, 24], iconAnchor: [20, 12]
+    });
+    nearestState.userMarker = L.marker([coords.lat, coords.lng], { icon: youIcon }).addTo(nearestState.map);
+    nearestState.map.setView([coords.lat, coords.lng], 9);
+    renderNearestList(centers, coords);
+  }
+
+  function renderNearestList(centers, coords) {
+    const listEl = document.getElementById('nearest-list');
+    if (!listEl) return;
+    const withDist = centers.map(c => ({
+      ...c,
+      _dist: coords && typeof c.latitude === 'number' && typeof c.longitude === 'number'
+        ? haversineKm(coords.lat, coords.lng, c.latitude, c.longitude) : null
+    }));
+    if (coords) withDist.sort((a, b) => (a._dist ?? 1e9) - (b._dist ?? 1e9));
+
+    listEl.innerHTML = withDist.map((c, i) => `
+      <div class="nearest-card ${coords && i === 0 ? 'nearest-top' : ''}" data-lat="${c.latitude}" data-lng="${c.longitude}">
+        ${coords && i === 0 ? '<div class="nearest-badge">Nearest · సమీపం</div>' : ''}
+        <div class="nc-name">${escapeHtml(c.name || '')}</div>
+        <div class="nc-addr">${escapeHtml(c.address || '')}</div>
+        <div class="nc-meta">${escapeHtml([c.mandal, c.district].filter(Boolean).join(' · '))}</div>
+        <div class="nc-foot">
+          ${c._dist != null ? `<span class="nc-dist">${c._dist.toFixed(1)} km</span>` : '<span class="nc-dist nc-dist-na">Distance unknown</span>'}
+          ${c.phone ? `<a class="nc-call" href="tel:${escapeHtml(c.phone)}">📞 ${escapeHtml(c.phone)}</a>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    listEl.querySelectorAll('.nearest-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const lat = parseFloat(card.dataset.lat), lng = parseFloat(card.dataset.lng);
+        if (!isNaN(lat) && !isNaN(lng) && nearestState.map) {
+          nearestState.map.setView([lat, lng], 13);
+        }
+      });
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  }
+
   // ========== GLOBAL EXPOSURES ==========
   window.app = {
     showScreen,
