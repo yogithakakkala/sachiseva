@@ -2270,6 +2270,7 @@
   // ========== NEAREST SACHIVALAYAM CENTER ==========
   const SUPABASE_URL_NEAREST = 'https://ihfdwtzrpbjlfcmwmpkx.supabase.co';
   const SUPABASE_KEY_NEAREST = 'sb_publishable_7i_O9sXiDh3SOF51TGTnPQ_yV6Nj1o6';
+  const NEAREST_RADIUS_KM = 20; // Only show centers within this radius; falls back to closest one if none.
   let nearestState = { map: null, markers: [], userMarker: null, centers: [], userCoords: null, loaded: false };
 
   // Haversine distance in km
@@ -2387,7 +2388,6 @@
   }
 
   function finalizeNearest(centers, coords) {
-    setNearestStatus('', '');
     if (nearestState.userMarker) nearestState.map.removeLayer(nearestState.userMarker);
     const youIcon = L.divIcon({
       className: 'you-marker',
@@ -2396,7 +2396,41 @@
     });
     nearestState.userMarker = L.marker([coords.lat, coords.lng], { icon: youIcon }).addTo(nearestState.map);
     nearestState.map.setView([coords.lat, coords.lng], 9);
-    renderNearestList(centers, coords);
+
+    // Compute distances and filter by radius
+    const withValid = centers.filter(c => typeof c.latitude === 'number' && typeof c.longitude === 'number');
+    const sorted = withValid
+      .map(c => ({ c, d: haversineKm(coords.lat, coords.lng, c.latitude, c.longitude) }))
+      .sort((a, b) => a.d - b.d);
+    const withinRadius = sorted.filter(x => x.d <= NEAREST_RADIUS_KM);
+
+    let visible;
+    if (withinRadius.length > 0) {
+      visible = withinRadius.map(x => x.c);
+      setNearestStatus('', '');
+    } else if (sorted.length > 0) {
+      visible = [sorted[0].c];
+      setNearestStatus(`No Sachivalayam centers found within ${NEAREST_RADIUS_KM} km. Showing closest available center instead.`, 'warn');
+    } else {
+      visible = [];
+      setNearestStatus('No centers available.', 'warn');
+    }
+
+    // Redraw markers for visible set only
+    nearestState.markers.forEach(m => nearestState.map.removeLayer(m));
+    nearestState.markers = [];
+    visible.forEach(c => {
+      const m = L.marker([c.latitude, c.longitude]).addTo(nearestState.map)
+        .bindPopup(
+          `<strong>${escapeHtml(c.name || '')}</strong><br>` +
+          `${escapeHtml(c.address || '')}<br>` +
+          `${escapeHtml([c.mandal, c.district].filter(Boolean).join(', '))}<br>` +
+          (c.phone ? `📞 <a href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a>` : '')
+        );
+      nearestState.markers.push(m);
+    });
+
+    renderNearestList(visible, coords);
   }
 
   function renderNearestList(centers, coords) {
