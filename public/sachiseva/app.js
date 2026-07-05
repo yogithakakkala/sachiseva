@@ -2270,6 +2270,7 @@
   // ========== NEAREST SACHIVALAYAM CENTER ==========
   const SUPABASE_URL_NEAREST = 'https://ihfdwtzrpbjlfcmwmpkx.supabase.co';
   const SUPABASE_KEY_NEAREST = 'sb_publishable_7i_O9sXiDh3SOF51TGTnPQ_yV6Nj1o6';
+  const NEAREST_RADIUS_KM = 20; // Only show centers within this radius; falls back to closest one if none.
   let nearestState = { map: null, markers: [], userMarker: null, centers: [], userCoords: null, loaded: false };
 
   // Haversine distance in km
