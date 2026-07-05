@@ -286,6 +286,7 @@
       case 'checklist': renderChecklistScreen(); break;
       case 'services': renderServicesScreen(); break;
       case 'tracker': renderTrackerScreen(); break;
+      case 'nearest': renderNearestScreen(); break;
       case 'help': renderHelpScreen(); break;
     }
 
